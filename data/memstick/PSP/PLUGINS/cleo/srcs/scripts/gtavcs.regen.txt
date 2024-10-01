@@ -1,0 +1,36 @@
+{$CLEO .csa}
+
+thread 'REGEN'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // player handle
+end
+ 
+wait 1000
+
+while true
+    wait 100
+    0DD5: 0@ = get_platform
+    if 
+        0@ == 1
+    then
+        // 0004: 1@ = $537 // player handle on Android
+    else
+        0004: 1@ = $PLAYER_CHAR // player handle on PSP
+    end     
+    if 
+        826E: not is_player_control_on 1@
+    then
+        continue
+    end
+    014D: get_char_health 1@ store_to 0@
+    if and
+        0@ <> 200 
+        0@ <> 0 
+    then
+        0@ += 1
+        014B: set_char_health 1@ to 0@
+    end
+end
+

@@ -1,0 +1,154 @@
+{$CLEO .csi}
+
+thread 'TLPRT'
+var 
+    0@ : Integer
+    3@ : Integer
+    4@ : Float
+    5@ : Float
+    6@ : Float
+    10@ : Integer // selected item index
+    12@ : Integer // active item index
+    20@ : Integer // player actor/char
+end
+
+0DD5: 0@ = get_platform
+if 
+    0@ == 1
+then
+    // 0004: 20@ = $537 // player handle on Android
+else
+    0004: 20@ = $PLAYER_CHAR // player handle on PSP
+end
+
+0DDD: 0@ = get_mutex_var 0
+if or
+    0@ == 1  
+    826E: not is_player_control_on 20@     
+then
+    end_thread
+end
+
+0DDC: set_mutex_var 0 to 1
+0107: set_player_control 20@ to 0
+
+0DD0: 0@ = get_label_addr @menu_desc
+0DF2: create_menu 0@ items 9
+0DF5: set_menu_active_item_index 12@
+
+// touch handle loop
+while true
+    wait 0
+    // resets menu touch item index as well
+    0DF4: 10@ = get_menu_touched_item_index maxtime 100
+    // activate
+    if and
+        10@ >= 0
+        10@ < 9
+    then
+        3@ = 10@
+        gosub @get_coords
+        01B5: get_closest_car_node 4@ 5@ 6@ store_to 4@ 5@ 6@
+        6@ += 1.0
+        0044: set_char_coordinates 20@ to 4@ 5@ 6@
+        wait 100
+        0044: set_char_coordinates 20@ to 4@ 5@ 6@
+        0221: set_camera_behind_player
+        break
+    end
+    // close menu
+    if 
+        10@ == -2
+    then
+        break
+    end
+end
+
+0DF6: 12@ = get_menu_active_item_index
+
+// wait to show what was selected and not to trigger player controls with current touch
+wait 100           
+
+0DF3: delete_menu
+0107: set_player_control 20@ to 1
+0DDC: set_mutex_var 0 to 0      
+
+end_thread
+
+:get_coords
+if 3@ == 0
+then
+	4@ = -271.0 
+	5@ = -501.0 
+	6@ = 11.0 
+end
+if 3@ == 1 
+then	
+	4@ = -681.0
+	5@ = -1432.0 
+	6@ = 10.0 
+end
+if 3@ == 2 
+then	
+	4@ = -1431.0 
+	5@ = -807.0 
+	6@ = 14.0 
+end
+if 3@ == 3 
+then	
+	4@ = -1686.0 
+	5@ = -336.0 
+	6@ = 14.0 
+end
+if 3@ == 4 
+then	
+	4@ = -664.0
+	5@ = 739.0
+	6@ = 11.0 
+end
+if 3@ == 5 
+then	
+	4@ = -1099.0
+	5@ = 1328.0
+	6@ = 20.0
+end
+if 3@ == 6 
+then	
+	4@ = 32.0
+	5@ = 961.0
+	6@ = 10.0
+end
+if 3@ == 7 
+then	
+	4@ = 504.0
+	5@ = -81.0
+	6@ = 10.0
+end
+if 3@ == 8 
+then	
+	4@ = 238.0
+	5@ = -1280.0
+	6@ = 11.0
+end
+return
+
+:menu_desc
+hex
+    // flags
+    00 00 00 00
+    // title
+    "TELEPORT" 00
+    // close button
+    "CLOSE" 00
+    // items
+    "Starfish" 20 "island" 00
+    "Docks" 00
+    "Airport" 00
+    "Military" 20 "base" 00
+    "Downtown" 00
+    "Stadium" 00
+    "Movie" 20 "studio" 00
+    "Malibu" 00
+    "Ocean" 20 "view" 00
+    00
+end

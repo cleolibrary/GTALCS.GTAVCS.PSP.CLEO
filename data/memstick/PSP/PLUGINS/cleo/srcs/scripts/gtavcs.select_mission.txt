@@ -1,0 +1,153 @@
+{$CLEO .csi}
+
+thread 'SLMSN'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // general purporse
+    2@ : Integer  // player handle
+    3@ : Integer  // onmission handle
+    10@ : Integer // selected item index
+    11@ : Integer // active item index
+end  
+
+0DD5: 0@ = get_platform
+if 
+    0@ == 1
+then
+    // 0004: 2@ = $537 // player handle on Android
+    // 0004: 3@ = $561 // onmission on Android
+else
+    0004: 2@ = $PLAYER_CHAR // player handle on PSP
+    0004: 3@ = $ONMISSION // onmission on PSP
+end
+
+0DDD: 0@ = get_mutex_var 0
+if or
+    0@ == 1
+    3@ == 1 // on mission
+    826E: not is_player_control_on 2@ 
+then
+    end_thread
+end       
+
+0DDC: set_mutex_var 0 to 1    
+    
+0DD0: 0@ = get_label_addr @menu_desc
+0DF2: create_menu 0@ items 57
+0DF5: set_menu_active_item_index 11@
+    
+0107: set_player_control 2@ to 0
+
+1@ = 0
+    
+// touch handle loop
+while true
+    wait 0
+    // resets menu touch item index as well
+    0DF4: 10@ = get_menu_touched_item_index maxtime 100
+    // teleport to coords
+    if and
+        10@ >= 0
+        10@ < 70
+    then
+        1@ = 10@
+        1@ += 42
+        break        
+    end
+    // close menu
+    if 
+        10@ == -2
+    then
+        break
+    end
+end
+
+0DF6: 11@ = get_menu_active_item_index
+
+// wait to show what was selected and not to trigger player controls with current touch
+wait 100     
+0DF3: delete_menu    
+0107: set_player_control 2@ to 1
+0DDC: set_mutex_var 0 to 0
+
+// start mission
+if 
+    1@ > 0
+then
+    wait 100
+    0289: load_and_launch_mission_internal 1@
+end    
+
+end_thread
+
+:menu_desc
+hex
+    // flags
+    03 00 00 00
+    // title
+    "SELECT" 20 "MISSION" 00
+    // close button
+    "CLOSE" 00
+    // items
+    "JER_A02" 00
+    "JER_A03" 00
+    "PHI_A01" 00
+    "PHI_A02" 00
+    "PHI_A03" 00
+    "PHI_A04" 00
+    "MAR_A01" 00
+    "MAR_A02" 00
+    "MAR_A03" 00
+    "MAR_A04" 00
+    "MAR_A05" 00
+    "LOU_A01" 00
+    "LOU_A02" 00
+    "LOU_A03" 00
+    "LOU_A04" 00
+    "LOU_B01" 00
+    "LOU_B02" 00
+    "LAN_B01" 00
+    "LAN_B02" 00
+    "LAN_B04" 00
+    "LAN_B05" 00
+    "LAN_B06" 00
+    "UMB_B01" 00
+    "UMB_B02" 00
+    "UMB_B03" 00
+    "UMB_B04" 00
+    "BRY_B01" 00
+    "BRY_B03" 00
+    "BRY_B04" 00
+    "MEN_C01" 00
+    "MEN_C02" 00
+    "MEN_C03" 00
+    "MEN_C05" 00
+    "MEN_C06" 00
+    "REN_C01" 00
+    "REN_C02" 00
+    "REN_C03" 00
+    "REN_C04" 00
+    "REN_C05" 00
+    "REN_C06" 00
+    "LAN_C01" 00
+    "LAN_C03" 00
+    "LAN_C04" 00
+    "LAN_C05" 00
+    "LAN_C06" 00
+    "LAN_C07" 00
+    "LAN_C08" 00
+    "LAN_C09" 00
+    "GON_C01" 00
+    "GON_C02" 00
+    "GON_C03" 00
+    "GON_C04" 00
+    "DIA_C01" 00
+    "DIA_C02" 00
+    "DIA_C03" 00
+    "DIA_C04" 00
+    "DIA_C05" 00    
+    00
+end  
+
+       

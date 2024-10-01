@@ -1,0 +1,41 @@
+{$CLEO .csa}
+
+thread 'UNLAMMO'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // general purporse
+    2@ : Integer  // player handle
+end
+ 
+wait 1000
+
+while true
+    wait 100
+    0DD5: 0@ = get_platform
+    if 
+        0@ == 1
+    then
+        // 0004: 2@ = $537 // player handle on Android
+    else
+        0004: 2@ = $PLAYER_CHAR // player handle on PSP
+    end     
+    if
+        826A: not is_char_in_control 2@
+    then
+        continue
+    end
+    02C0: get_current_char_weapon 2@ store_to 0@
+    028B: get_ammo_in_char_weapon 2@ weapon 0@ store_to 1@
+    if and
+        0@ <> 0
+        1@ <> 0
+        1@ <> 1
+        1@ <> 500
+    then
+        //011F: print_with_number_now 'NUMBER' number 0@ time 100 flag 1
+        0106: give_weapon_to_char 2@ weapon 0@ ammo 500        
+        00D5: set_char_ammo 2@ weapon 0@ ammo 500
+    end        
+end
+

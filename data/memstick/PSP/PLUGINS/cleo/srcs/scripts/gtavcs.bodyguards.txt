@@ -1,0 +1,99 @@
+{$CLEO .csi}
+
+thread 'BDGUARD'
+
+var 
+    0@ : Integer  // general purporse
+    5@ : Float    // player/ped x
+    6@ : Float    // player/ped y
+    7@ : Float    // player/ped z
+    10@ : Integer // bodyguard 
+    11@ : Integer // bodyguard
+    12@ : Integer // bodyguard
+    20@ : Integer // player handle
+end  
+
+0DD5: 0@ = get_platform
+if 
+    0@ == 1
+then
+    // 0004: 20@ = $537 // player handle on Android
+else
+    0004: 20@ = $PLAYER_CHAR // player handle on PSP
+end
+
+if or
+    826E: not is_player_control_on 20@
+    02E1: is_char_in_water 20@
+then
+    end_thread
+end
+
+0DDD: 0@ = get_mutex_var 23487
+if
+    0@ == 0
+then
+    gosub @spawn_bodyguards
+    0267: print_help 'BDGSPWN'
+    0DDC: set_mutex_var 23487 to 1
+else
+    gosub @remove_bodyguards  
+    0267: print_help 'BDGOFF'  
+    0DDC: set_mutex_var 23487 to 0
+end    
+
+end_thread
+
+:spawn_bodyguards
+gosub @spawn_ped
+10@ = 0@
+gosub @spawn_ped
+11@ = 0@
+gosub @spawn_ped
+12@ = 0@
+return 
+
+:remove_bodyguards
+0@ = 10@
+gosub @remove_ped
+0@ = 11@
+gosub @remove_ped
+0@ = 12@
+gosub @remove_ped
+return
+
+:spawn_ped
+0160: request_model #M16
+0228: load_all_models_now
+while 8161: not has_model_loaded #M16
+    wait 0
+end
+0138: generate_random_float_in_range 1.0 3.0 store_to 5@
+0138: generate_random_float_in_range 1.0 3.0 store_to 6@
+02EE: get_offset_from_char_in_world_coords 20@ offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
+0222: create_random_char 5@ 6@ 7@ store_to 0@
+0115: dont_remove_char 0@
+0119: tie_char 0@ to_char 20@ 
+01EC: set_char 0@ running 1 
+0310: set_char_as_player_friend 0@ player 20@ on 1 
+0347: set_char_never_targetted 0@ to 1 
+0331: set_char_in_players_group_can_fight 0@ can_fight 1
+02A5: set_char_suffers_critical_hits 0@ enable 0
+0324: set_char_can_be_damaged_by_members_of_gang 0@ gang_ID 6 unk3 0 
+01A4: set_char_heed_threats 0@ flag 1 
+0442: unknown_char_set_command_2691 0@ flag 1 
+04D3: clear_char_leadership 0@ 
+01C9: set_char_accuracy 0@ to 100
+03D5: set_char_max_health 0@ to 2000 
+014B: set_char_health 0@ to 2000 
+0106: give_weapon_to_char 0@ weapon 28 ammo 9999
+0162: release_model #M16
+return
+
+:remove_ped
+if
+    034A: does_char_exist 0@
+then
+    020D: remove_char_elegantly 0@
+end
+return 

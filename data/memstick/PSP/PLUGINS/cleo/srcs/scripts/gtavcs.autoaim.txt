@@ -1,0 +1,68 @@
+{$CLEO .csa}
+
+thread 'AUTOAIM'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // player actor/char
+    2@ : Integer  // CPad::GetPad()
+    3@ : Integer  // frames to keep the aim
+end
+ 
+wait 1000
+
+0DD5: 0@ = get_platform
+if 
+    0@ <> 2 // PSP
+then
+    end_thread
+end                                            
+
+0DD0: 2@ = get_label_addr @eptn_CPad_GetPad
+0DDA: 2@ = get_pattern_addr_cstr 2@ index 0
+
+3@ = 0
+
+while true
+    wait 0
+    
+    0DDD: 0@ = get_mutex_var 0
+    if
+        0@ <> 0
+    then
+        wait 150
+        3@ = 0
+        continue
+    end
+    
+    0004: 1@ = $PLAYER_CHAR
+    
+    if and
+        026A: is_char_in_control 1@
+        02A8: is_char_on_foot 1@
+        007F: is_button_pressed 0 button 17
+     then
+        gosub @set_aim
+        3@ = 20
+        continue
+     end
+     
+     if
+        3@ > 0
+     then
+        gosub @set_aim
+        3@ -= 1
+     end   
+end
+
+:set_aim
+//011F: print_with_number_now 'NUMBER' number 3@ time 100 flag 1        
+0DDE: call_func 2@ add_ib 0 __result 'resi' 0@ __pad_index 'i' 0
+0@ += 14
+0DD9: write_mem_addr 0@ value 1 size 2 add_ib 0 protect 0     
+return
+
+:eptn_CPad_GetPad
+hex
+    "?? ?? ?? ?? 23 20 A4 00 C0 20 04 00 23 10 85 00" 00
+end

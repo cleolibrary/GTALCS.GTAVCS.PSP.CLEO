@@ -1,0 +1,44 @@
+{$CLEO .csa}
+
+thread 'MSNFIX'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // player handle
+    2@ : Integer  // onmission handle
+end
+
+while true
+    wait 1000
+    0DD5: 0@ = get_platform
+    if 
+        0@ == 1
+    then
+        // 0004: 1@ = $537 // player handle on Android
+        // 0004: 2@ = $561 // onmission on Android
+    else
+        0004: 1@ = $PLAYER_CHAR // player handle on PSP
+        0004: 2@ = $ONMISSION // onmission on PSP
+    end    
+    if or
+        826E: not is_player_control_on 1@
+        2@ == 0
+    then
+        continue
+    end    
+    // Boomshine Blowout, timer fix
+    040F: get_length_of_text_entry 'PHI2_F0' store_to 0@
+    if
+        0@ > 0
+    then
+        $5530 = 0
+        $5531 = 0        
+    end
+    // The Exchange, timer fix
+    040F: get_length_of_text_entry 'DIA2_04' store_to 0@
+    if
+        0@ > 0
+    then
+        $5436 = 100.0
+    end    
+end    

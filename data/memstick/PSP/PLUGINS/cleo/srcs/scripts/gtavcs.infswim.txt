@@ -1,0 +1,29 @@
+{$CLEO .csa}
+
+thread 'INFSWIM'
+
+var 
+    0@ : Integer  // general purporse
+    1@ : Integer  // player actor/char
+end
+ 
+wait 1000
+
+while true
+    wait 100
+    0DD5: 0@ = get_platform
+    if 
+        0@ == 1
+    then
+        // 0004: 1@ = $537 // player handle on Android
+    else
+        0004: 1@ = $PLAYER_CHAR // player handle on PSP
+    end  
+    if 
+        826E: not is_player_control_on 1@
+    then
+        continue
+    end
+    02F9: set_char_drowns_in_water 1@ to 0
+end
+
