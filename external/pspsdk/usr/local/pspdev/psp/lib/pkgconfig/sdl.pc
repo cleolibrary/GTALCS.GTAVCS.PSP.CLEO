@@ -11,5 +11,5 @@ Version: 1.2.15
 Requires:
 Conflicts:
 Libs: -L${libdir}  -lSDLmain -lSDL 
-Libs.private: -lSDLmain -lSDL   -lm -lGL -lm -lpspvfpu -lpspdebug -lpspgu -lpspctrl -lpspge -lpspdisplay -lpsphprm -lpspsdk -lpsprtc -lpspaudio -lpsputility -lpspnet_inet -lpspirkeyb -lpsppower -lc -lpspuser
+Libs.private: -lSDLmain -lSDL   -lm -lpspdebug -lpspgu -lpspctrl -lpspge -lpspdisplay -lpsphprm -lpspsdk -lpsprtc -lpspaudio -lpsputility -lpspnet_inet -lpspirkeyb -lpsppower -lc -lpspuser
 Cflags: -I${includedir}/SDL -D_GNU_SOURCE=1 -Dmain=SDL_main

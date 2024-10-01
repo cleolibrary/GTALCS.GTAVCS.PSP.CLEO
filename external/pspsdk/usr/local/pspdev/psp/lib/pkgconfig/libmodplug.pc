@@ -1,0 +1,12 @@
+prefix=/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp
+exec_prefix=/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp
+libdir=/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp/lib
+includedir=/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp/include
+
+Name: libmodplug
+Description: The ModPlug mod file playing library.
+Version: 0.8.8.5
+Requires: 
+Libs: -L/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp/lib -lmodplug 
+Libs.private: -lstdc++ -lm
+Cflags: -I/__w/psp-packages/psp-packages/libmodplug/pkg/libmodplug/psp/include

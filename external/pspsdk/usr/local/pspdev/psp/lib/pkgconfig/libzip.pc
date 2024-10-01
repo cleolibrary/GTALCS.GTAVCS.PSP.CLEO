@@ -10,5 +10,5 @@ Name: libzip
 Description: library for handling zip archives
 Version: 1.9.2
 Libs:  -L${libdir} -lzip
-Libs.private:  -lbz2 -lMbedTLS::MbedTLS -lz
+Libs.private:  -lbz2 -lz
 Cflags: -I${includedir}

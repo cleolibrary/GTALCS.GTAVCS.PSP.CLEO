@@ -9,5 +9,5 @@ Version: 2.20.2
 Requires: sdl2 >= 2.0.10
 Libs: -L${libdir} -lSDL2_ttf
 Cflags: -I${includedir}/SDL2
-Requires.private: freetype2
+Requires.private: harfbuzz freetype2
 Libs.private: 

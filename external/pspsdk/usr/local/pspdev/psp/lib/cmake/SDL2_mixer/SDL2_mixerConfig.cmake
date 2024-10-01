@@ -16,9 +16,9 @@ set(SDL2MIXER_FLAC_LIBFLAC          OFF)
 set(SDL2MIXER_FLAC_DRFLAC           OFF)
 
 set(SDL2MIXER_MOD                   ON)
-set(SDL2MIXER_MOD_MODPLUG           OFF)
-set(SDL2MIXER_MOD_XMP               ON)
-set(SDL2MIXER_MOD_XMP_LITE          ON)
+set(SDL2MIXER_MOD_MODPLUG           ON)
+set(SDL2MIXER_MOD_XMP               OFF)
+set(SDL2MIXER_MOD_XMP_LITE          OFF)
 
 set(SDL2MIXER_MP3                   ON)
 set(SDL2MIXER_MP3_DRMP3             ON)

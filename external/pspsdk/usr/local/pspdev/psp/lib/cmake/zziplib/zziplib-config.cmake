@@ -1,0 +1,6 @@
+include(CMakeFindDependencyMacro)
+find_dependency(ZLIB)
+file(GLOB TARGET_FILES "${CMAKE_CURRENT_LIST_DIR}/*Targets.cmake")
+foreach (TARGET_FILE ${TARGET_FILES})
+    include("${TARGET_FILE}")
+endforeach()

@@ -7,7 +7,7 @@ includedir=${prefix}/include
 
 Name: sdl2
 Description: Simple DirectMedia Layer is a cross-platform multimedia library designed to provide low level access to audio, keyboard, mouse, joystick, 3D hardware via OpenGL, and 2D video framebuffer.
-Version: 2.28.1
+Version: 2.30.4
 Requires.private: 
 Conflicts:
 Libs: -L${libdir}   -lSDL2main -lSDL2    -lSDL2main -lSDL2  -lm -lGL -lpspvram -lpspaudio -lpspvfpu -lpspdisplay -lpspgu -lpspge -lpsphprm -lpspctrl -lpsppower

@@ -7,7 +7,7 @@ OUTPUT_FORMAT("elf32-littlemips", "elf32-bigmips",
 	      "elf32-littlemips")
 OUTPUT_ARCH(mips:allegrex)
 ENTRY(_start)
-SEARCH_DIR("/usr/local/pspdev/psp/lib");
+SEARCH_DIR("=/home/runner/work/pspdev/pspdev/pspdev/psp/lib"); SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */

@@ -5,8 +5,10 @@ includedir=${prefix}/include
 
 Name: SDL_image
 Description: image loading library for Simple DirectMedia Layer
-Version: 1.2.12
+Version: 1.2.13
 Requires: sdl >= 1.2.10
 Libs: -L${libdir} -lSDL_image
+Requires.private: libpng libjpeg 
+Libs.private: 
 Cflags: -I${includedir}/SDL
 

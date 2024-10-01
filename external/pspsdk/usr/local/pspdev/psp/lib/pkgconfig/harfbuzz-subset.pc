@@ -1,0 +1,12 @@
+prefix=${PSPDEV}/psp
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: harfbuzz subsetter
+Description: HarfBuzz font subsetter
+Version: 8.5.0
+
+Requires: harfbuzz = 8.5.0
+Libs: -L${libdir} -lharfbuzz-subset
+Cflags: -I${includedir}/harfbuzz

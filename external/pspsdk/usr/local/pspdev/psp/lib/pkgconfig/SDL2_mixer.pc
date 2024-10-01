@@ -9,5 +9,5 @@ Version: 2.6.3
 Requires: sdl2 >= 2.0.9
 Libs: -L${libdir} -lSDL2_mixer
 Cflags: -I${includedir}/SDL2
-Requires.private: vorbisfile libxmp-lite
+Requires.private: vorbisfile libmodplug
 Libs.private: 
