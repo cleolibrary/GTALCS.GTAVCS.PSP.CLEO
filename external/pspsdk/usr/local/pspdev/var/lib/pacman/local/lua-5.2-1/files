@@ -1,0 +1,15 @@
+%FILES%
+psp/
+psp/include/
+psp/include/lauxlib.h
+psp/include/lua.h
+psp/include/lua.hpp
+psp/include/luaconf.h
+psp/include/lualib.h
+psp/lib/
+psp/lib/liblua.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/lua/
+psp/share/licenses/lua/readme.html
+

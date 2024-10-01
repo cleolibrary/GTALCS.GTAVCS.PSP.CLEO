@@ -1,0 +1,36 @@
+%NAME%
+squirrel
+
+%VERSION%
+3.1.0-1
+
+%BASE%
+squirrel
+
+%DESC%
+Runtime libraries for the Squirrel programming language
+
+%URL%
+http://squirrel-lang.org/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486890
+
+%INSTALLDATE%
+1691496692
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+2092630
+
+%LICENSE%
+custom
+
+%VALIDATION%
+sha256
+

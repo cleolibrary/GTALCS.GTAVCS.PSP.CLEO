@@ -1,0 +1,12 @@
+#!/bin/bash
+
+## Make sure PSPDEV is set
+if [ -z "${PSPDEV}" ]; then
+    echo "The PSPDEV environment variable has not been set"
+    exit 1
+fi
+
+cmake \
+  -DCMAKE_TOOLCHAIN_FILE="${PSPDEV}/psp/share/pspdev.cmake" \
+  "$@"
+

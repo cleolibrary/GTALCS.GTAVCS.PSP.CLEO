@@ -1,0 +1,36 @@
+%NAME%
+kubridge
+
+%VERSION%
+20220827-1
+
+%BASE%
+kubridge
+
+%DESC%
+a bridging library to provide Kernel functions for PSPs in User Mode
+
+%URL%
+https://github.com/pspdev/kubridge
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486876
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+41952
+
+%LICENSE%
+GPL2
+
+%VALIDATION%
+sha256
+

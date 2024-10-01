@@ -1,0 +1,17 @@
+%FILES%
+psp/
+psp/include/
+psp/include/cjson/
+psp/include/cjson/cJSON.h
+psp/include/cjson/cJSON_Utils.h
+psp/lib/
+psp/lib/libcjson.a
+psp/lib/libcjson_utils.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/libcjson.pc
+psp/lib/pkgconfig/libcjson_utils.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/cjson/
+psp/share/licenses/cjson/LICENSE
+

@@ -1,0 +1,36 @@
+%NAME%
+mbedtls
+
+%VERSION%
+2.16.6-1
+
+%BASE%
+mbedtls
+
+%DESC%
+Secure Socket Layer library
+
+%URL%
+https://www.trustedfirmware.org/projects/mbed-tls/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486847
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+2322696
+
+%LICENSE%
+Apache 2.0 license
+
+%VALIDATION%
+sha256
+

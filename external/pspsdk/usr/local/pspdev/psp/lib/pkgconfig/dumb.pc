@@ -1,0 +1,12 @@
+prefix=${PSPDEV}/psp
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: DUMB
+Description: DUMB is a module audio renderer library. 
+Version: 2.0
+URL: https://github.com/kode54/dumb/
+Libs: -L${libdir} -llibdumb
+Libs.private: -lm
+Cflags: -I${includedir} 

@@ -1,0 +1,36 @@
+%NAME%
+expat
+
+%VERSION%
+2.4.1-3
+
+%BASE%
+expat
+
+%DESC%
+XML parsing C library
+
+%URL%
+https://libexpat.github.io/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486783
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+429104
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

@@ -1,0 +1,36 @@
+%NAME%
+dumb
+
+%VERSION%
+2.0.3-2
+
+%BASE%
+dumb
+
+%DESC%
+Dynamic Universal Music Bibliotheque - DUMB - Module/tracker based music format parser and player library
+
+%URL%
+https://github.com/kode54/dumb
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486776
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+412463
+
+%LICENSE%
+GPL2
+
+%VALIDATION%
+sha256
+

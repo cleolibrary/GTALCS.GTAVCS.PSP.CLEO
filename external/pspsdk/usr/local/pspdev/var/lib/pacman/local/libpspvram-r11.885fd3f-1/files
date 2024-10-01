@@ -1,0 +1,13 @@
+%FILES%
+psp/
+psp/include/
+psp/include/vram.h
+psp/include/vramalloc.h
+psp/lib/
+psp/lib/libpspvram.a
+psp/lib/libpspvramalloc.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/libpspvram/
+psp/share/licenses/libpspvram/LICENSE
+

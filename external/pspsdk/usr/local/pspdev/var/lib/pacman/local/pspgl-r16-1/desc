@@ -1,0 +1,36 @@
+%NAME%
+pspgl
+
+%VERSION%
+r16-1
+
+%BASE%
+pspgl
+
+%DESC%
+OpenGL-ESish library for PSP
+
+%URL%
+https://github.com/pspdev/psp-ports
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486869
+
+%INSTALLDATE%
+1691496691
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+896824
+
+%LICENSE%
+BSD
+
+%VALIDATION%
+sha256
+

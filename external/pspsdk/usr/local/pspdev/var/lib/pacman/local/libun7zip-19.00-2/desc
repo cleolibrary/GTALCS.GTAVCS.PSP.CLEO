@@ -1,0 +1,36 @@
+%NAME%
+libun7zip
+
+%VERSION%
+19.00-2
+
+%BASE%
+libun7zip
+
+%DESC%
+A library that provides 7-Zip (.7z) archive handling and extraction
+
+%URL%
+https://github.com/bucanero/libun7zip
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486814
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+107236
+
+%LICENSE%
+Apache-2.0 license
+
+%VALIDATION%
+sha256
+

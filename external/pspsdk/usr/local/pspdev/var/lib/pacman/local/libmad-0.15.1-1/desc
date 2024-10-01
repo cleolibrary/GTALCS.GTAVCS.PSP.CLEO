@@ -1,0 +1,36 @@
+%NAME%
+libmad
+
+%VERSION%
+0.15.1-1
+
+%BASE%
+libmad
+
+%DESC%
+MPEG audio decoder library for PSP
+
+%URL%
+https://www.underbit.com/products/mad
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486808
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+176452
+
+%LICENSE%
+GPL2
+
+%VALIDATION%
+sha256
+

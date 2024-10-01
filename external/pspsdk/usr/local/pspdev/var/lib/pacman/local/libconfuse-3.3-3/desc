@@ -1,0 +1,36 @@
+%NAME%
+libconfuse
+
+%VERSION%
+3.3-3
+
+%BASE%
+libconfuse
+
+%DESC%
+Small configuration file parser library for C
+
+%URL%
+https://github.com/libconfuse/libconfuse/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486876
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+143888
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

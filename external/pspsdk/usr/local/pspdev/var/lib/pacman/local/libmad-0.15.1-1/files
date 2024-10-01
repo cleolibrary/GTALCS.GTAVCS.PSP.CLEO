@@ -1,0 +1,11 @@
+%FILES%
+psp/
+psp/include/
+psp/include/mad.h
+psp/lib/
+psp/lib/libmad.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/libmad/
+psp/share/licenses/libmad/COPYING
+

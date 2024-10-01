@@ -1,0 +1,16 @@
+%FILES%
+psp/
+psp/include/
+psp/include/pixman-1/
+psp/include/pixman-1/pixman-version.h
+psp/include/pixman-1/pixman.h
+psp/lib/
+psp/lib/libpixman-1.a
+psp/lib/libpixman-1.la
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/pixman-1.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/pixman/
+psp/share/licenses/pixman/COPYING
+

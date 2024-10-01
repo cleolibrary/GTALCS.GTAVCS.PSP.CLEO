@@ -1,0 +1,14 @@
+%FILES%
+psp/
+psp/include/
+psp/include/SDL/
+psp/include/SDL/SDL_ttf.h
+psp/lib/
+psp/lib/libSDL_ttf.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/SDL_ttf.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/sdl-ttf/
+psp/share/licenses/sdl-ttf/COPYING
+

@@ -1,0 +1,36 @@
+%NAME%
+openal
+
+%VERSION%
+1.21.1-2
+
+%BASE%
+openal
+
+%DESC%
+a cross-platform 3D audio API
+
+%URL%
+https://openal-soft.org/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486852
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+1664896
+
+%LICENSE%
+gpl2
+
+%VALIDATION%
+sha256
+

@@ -1,0 +1,11 @@
+prefix=${PSPDEV}/psp
+exec_prefix=${prefix}
+bindir=${prefix}/bin
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: bzip2
+Description: Lossless, block-sorting data compression
+Version: 1.1.0
+Libs: -L${libdir} -lbz2
+Cflags: -I${includedir}

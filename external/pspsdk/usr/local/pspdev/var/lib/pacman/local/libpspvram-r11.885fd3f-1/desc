@@ -1,0 +1,36 @@
+%NAME%
+libpspvram
+
+%VERSION%
+r11.885fd3f-1
+
+%BASE%
+libpspvram
+
+%DESC%
+Dynamic VRAM allocation manager for the PSP
+
+%URL%
+https://github.com/albe/libpspvram
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486806
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+9833
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

@@ -1,0 +1,36 @@
+%NAME%
+angelscript
+
+%VERSION%
+2.28.2-1
+
+%BASE%
+angelscript
+
+%DESC%
+A game-oriented interpreted compiled scripting language library
+
+%URL%
+http://angelcode.com/angelscript/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486756
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+5971260
+
+%LICENSE%
+ZLIB
+
+%VALIDATION%
+sha256
+

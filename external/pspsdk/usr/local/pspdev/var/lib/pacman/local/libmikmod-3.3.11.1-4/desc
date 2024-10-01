@@ -1,0 +1,36 @@
+%NAME%
+libmikmod
+
+%VERSION%
+3.3.11.1-4
+
+%BASE%
+libmikmod
+
+%DESC%
+a portable sound library capable of playing samples as well as module files
+
+%URL%
+http://mikmod.sourceforge.net/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486802
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+775332
+
+%LICENSE%
+GPL2.1
+
+%VALIDATION%
+sha256
+

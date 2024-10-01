@@ -1,0 +1,28 @@
+if [ ! -e "/etc/pki/tls/ct_log_list.cnf" ]
+then
+    /usr/bin/mkdir -p "/etc/pki/tls"
+    /usr/bin/cp "/etc/defaults/etc/pki/tls/ct_log_list.cnf" "/etc/pki/tls/ct_log_list.cnf"
+else
+        if [ -f /etc/pki/tls/ct_log_list.cnf  -a  -x /usr/bin/diff ]
+        then
+            /usr/bin/mkdir -p "/var/cache/setup/etc/pki/tls"
+            /usr/bin/rm -f "/var/cache/setup//etc/pki/tls/ct_log_list.cnf.diff"
+            /usr/bin/diff -wut "/etc/pki/tls/ct_log_list.cnf" "/etc/defaults/etc/pki/tls/ct_log_list.cnf" > "/var/cache/setup//etc/pki/tls/ct_log_list.cnf.diff" ||
+              echo "Defaults for /etc/pki/tls/ct_log_list.cnf differ from actual file, please check /var/cache/setup//etc/pki/tls/ct_log_list.cnf.diff"
+        fi
+fi
+
+if [ ! -e "/etc/pki/tls/openssl.cnf" ]
+then
+    /usr/bin/mkdir -p "/etc/pki/tls"
+    /usr/bin/cp "/etc/defaults/etc/pki/tls/openssl.cnf" "/etc/pki/tls/openssl.cnf"
+else
+        if [ -f /etc/pki/tls/openssl.cnf  -a  -x /usr/bin/diff ]
+        then
+            /usr/bin/mkdir -p "/var/cache/setup/etc/pki/tls"
+            /usr/bin/rm -f "/var/cache/setup//etc/pki/tls/openssl.cnf.diff"
+            /usr/bin/diff -wut "/etc/pki/tls/openssl.cnf" "/etc/defaults/etc/pki/tls/openssl.cnf" > "/var/cache/setup//etc/pki/tls/openssl.cnf.diff" ||
+              echo "Defaults for /etc/pki/tls/openssl.cnf differ from actual file, please check /var/cache/setup//etc/pki/tls/openssl.cnf.diff"
+        fi
+fi
+

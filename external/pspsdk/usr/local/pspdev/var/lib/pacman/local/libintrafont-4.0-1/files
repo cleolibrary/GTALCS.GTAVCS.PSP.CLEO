@@ -1,0 +1,15 @@
+%FILES%
+psp/
+psp/include/
+psp/include/intraFont.h
+psp/include/libccc.h
+psp/lib/
+psp/lib/libintrafont.a
+psp/share/
+psp/share/doc/
+psp/share/doc/libintrafont/
+psp/share/doc/libintrafont/README.md
+psp/share/licenses/
+psp/share/licenses/libintrafont/
+psp/share/licenses/libintrafont/LICENSE
+

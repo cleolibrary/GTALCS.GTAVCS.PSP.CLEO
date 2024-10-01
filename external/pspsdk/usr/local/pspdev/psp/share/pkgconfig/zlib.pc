@@ -1,0 +1,13 @@
+prefix=/psp
+exec_prefix=/psp
+libdir=/psp/lib
+sharedlibdir=/psp/lib
+includedir=/psp/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.11
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

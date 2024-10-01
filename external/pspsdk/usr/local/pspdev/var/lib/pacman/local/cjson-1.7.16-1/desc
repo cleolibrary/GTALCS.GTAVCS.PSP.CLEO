@@ -1,0 +1,36 @@
+%NAME%
+cjson
+
+%VERSION%
+1.7.16-1
+
+%BASE%
+cjson
+
+%DESC%
+Ultralightweight JSON parser in ANSI C.
+
+%URL%
+https://github.com/DaveGamble/cJSON/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486761
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+90816
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

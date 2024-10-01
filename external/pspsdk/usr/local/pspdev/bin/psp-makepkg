@@ -1,0 +1,22 @@
+#!/bin/bash
+
+## Make sure PSPDEV is set
+if [ -z "${PSPDEV}" ]; then
+    echo "The PSPDEV environment variable has not been set"
+    exit 1
+fi
+
+if [ ! -d "${PSPDEV}" ]; then
+    echo "${PSPDEV} does not exist"
+    exit 2
+fi
+
+## Export makepkg variables
+export PACMAN=psp-pacman
+export MAKEPKG_CONF="${PSPDEV}/etc/makepkg.conf"
+
+## Add the directory with pacman's binaries to the start of the PATH
+export PATH="${PSPDEV}/share/pacman/bin:${PATH}"
+
+## Run makepkg
+makepkg "$@"

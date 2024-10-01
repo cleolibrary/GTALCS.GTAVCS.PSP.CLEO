@@ -1,0 +1,36 @@
+%NAME%
+libyaml
+
+%VERSION%
+0.2.5-1
+
+%BASE%
+libyaml
+
+%DESC%
+LibYAML is a YAML parser and emitter library
+
+%URL%
+https://pyyaml.org/wiki/LibYAML
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486827
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+300294
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

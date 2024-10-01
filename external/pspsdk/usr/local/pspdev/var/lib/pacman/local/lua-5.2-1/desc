@@ -1,0 +1,36 @@
+%NAME%
+lua
+
+%VERSION%
+5.2-1
+
+%BASE%
+lua
+
+%DESC%
+Lua programming language for PSP
+
+%URL%
+https://lua.org
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486844
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+362692
+
+%LICENSE%
+MIT
+
+%VALIDATION%
+sha256
+

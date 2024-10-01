@@ -1,0 +1,16 @@
+%FILES%
+psp/
+psp/include/
+psp/include/zip.h
+psp/include/zipconf.h
+psp/lib/
+psp/lib/cmake/
+psp/lib/cmake/libzip/
+psp/lib/cmake/libzip/libzip-config-version.cmake
+psp/lib/cmake/libzip/libzip-config.cmake
+psp/lib/cmake/libzip/libzip-targets-noconfig.cmake
+psp/lib/cmake/libzip/libzip-targets.cmake
+psp/lib/libzip.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/libzip.pc
+

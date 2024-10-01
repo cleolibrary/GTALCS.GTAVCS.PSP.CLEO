@@ -1,0 +1,11 @@
+%FILES%
+psp/
+psp/include/
+psp/include/kubridge.h
+psp/lib/
+psp/lib/libpspkubridge.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/kubridge/
+psp/share/licenses/kubridge/license.txt
+

@@ -1,0 +1,36 @@
+%NAME%
+pocketpy
+
+%VERSION%
+1.0.9-1
+
+%BASE%
+pocketpy
+
+%DESC%
+Python interpreter for game scripting
+
+%URL%
+https://github.com/blueloveTH/pocketpy
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486862
+
+%INSTALLDATE%
+1691496691
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+3366204
+
+%LICENSE%
+Apache-2.0 license
+
+%VALIDATION%
+sha256
+

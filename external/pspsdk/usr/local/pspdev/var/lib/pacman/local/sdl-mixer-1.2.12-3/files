@@ -1,0 +1,14 @@
+%FILES%
+psp/
+psp/include/
+psp/include/SDL/
+psp/include/SDL/SDL_mixer.h
+psp/lib/
+psp/lib/libSDL_mixer.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/SDL_mixer.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/sdl-mixer/
+psp/share/licenses/sdl-mixer/COPYING
+

@@ -1,0 +1,36 @@
+%NAME%
+jsoncpp
+
+%VERSION%
+1.9.5-2
+
+%BASE%
+jsoncpp
+
+%DESC%
+a C++ library for interacting with JSON
+
+%URL%
+https://github.com/open-source-parsers/jsoncpp
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486758
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+815283
+
+%LICENSE%
+unlicense
+
+%VALIDATION%
+sha256
+

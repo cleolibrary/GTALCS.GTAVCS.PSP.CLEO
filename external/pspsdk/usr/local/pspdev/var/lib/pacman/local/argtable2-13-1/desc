@@ -1,0 +1,36 @@
+%NAME%
+argtable2
+
+%VERSION%
+13-1
+
+%BASE%
+argtable2
+
+%DESC%
+Argtable is an ANSI C library for parsing GNU style command line options with a minimum of fuss
+
+%URL%
+http://argtable.sourceforge.net/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486876
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+100470
+
+%LICENSE%
+GPL2
+
+%VALIDATION%
+sha256
+

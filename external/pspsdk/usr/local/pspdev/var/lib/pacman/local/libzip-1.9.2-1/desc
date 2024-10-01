@@ -1,0 +1,40 @@
+%NAME%
+libzip
+
+%VERSION%
+1.9.2-1
+
+%BASE%
+libzip
+
+%DESC%
+libzip is a C library for reading, creating, and modifying zip archives.
+
+%URL%
+https://libzip.org/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691487003
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+387243
+
+%LICENSE%
+3-clause BSD license
+
+%VALIDATION%
+sha256
+
+%DEPENDS%
+zlib
+bzip2
+

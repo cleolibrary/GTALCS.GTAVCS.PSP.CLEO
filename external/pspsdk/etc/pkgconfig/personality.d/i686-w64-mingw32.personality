@@ -1,0 +1,5 @@
+Triplet: i686-w64-mingw32
+SysrootDir: /usr/i686-w64-mingw32/sys-root
+DefaultSearchPaths: /usr/i686-w64-mingw32/sys-root/mingw/lib/pkgconfig:/usr/i686-w64-mingw32/sys-root/mingw/share/pkgconfig:/usr/share/pkgconfig
+SystemIncludePaths: /usr/i686-w64-mingw32/sys-root/mingw/include
+SystemLibraryPaths: /usr/i686-w64-mingw32/sys-root/mingw/lib

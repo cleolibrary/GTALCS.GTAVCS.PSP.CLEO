@@ -1,0 +1,13 @@
+%FILES%
+psp/
+psp/include/
+psp/include/dumb.h
+psp/lib/
+psp/lib/libdumb.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/dumb.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/dumb/
+psp/share/licenses/dumb/LICENSE
+

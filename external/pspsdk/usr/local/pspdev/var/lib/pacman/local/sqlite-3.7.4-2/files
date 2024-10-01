@@ -1,0 +1,10 @@
+%FILES%
+psp/
+psp/include/
+psp/include/sqlite3.h
+psp/include/sqlite3ext.h
+psp/lib/
+psp/lib/libsqlite3.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/sqlite3.pc
+

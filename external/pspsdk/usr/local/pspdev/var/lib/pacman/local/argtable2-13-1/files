@@ -1,0 +1,11 @@
+%FILES%
+psp/
+psp/include/
+psp/include/argtable2.h
+psp/lib/
+psp/lib/libargtable2.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/argtable2/
+psp/share/licenses/argtable2/COPYING
+

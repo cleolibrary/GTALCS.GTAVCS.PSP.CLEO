@@ -1,0 +1,36 @@
+%NAME%
+jpeg
+
+%VERSION%
+2.1.1-3
+
+%BASE%
+jpeg
+
+%DESC%
+a free library for JPEG image compression
+
+%URL%
+https://ijg.org/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486882
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+1733574
+
+%LICENSE%
+custom
+
+%VALIDATION%
+sha256
+

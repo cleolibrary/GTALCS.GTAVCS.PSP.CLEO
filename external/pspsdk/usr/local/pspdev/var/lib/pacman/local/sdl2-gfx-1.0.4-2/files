@@ -1,0 +1,17 @@
+%FILES%
+psp/
+psp/include/
+psp/include/SDL2/
+psp/include/SDL2/SDL2_framerate.h
+psp/include/SDL2/SDL2_gfxPrimitives.h
+psp/include/SDL2/SDL2_imageFilter.h
+psp/include/SDL2/SDL2_rotozoom.h
+psp/lib/
+psp/lib/libSDL2_gfx.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/SDL2_gfx.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/sdl2-gfx/
+psp/share/licenses/sdl2-gfx/COPYING
+

@@ -1,0 +1,16 @@
+%FILES%
+psp/
+psp/cmake/
+psp/cmake/yamlConfig.cmake
+psp/cmake/yamlConfigVersion.cmake
+psp/cmake/yamlTargets-noconfig.cmake
+psp/cmake/yamlTargets.cmake
+psp/include/
+psp/include/yaml.h
+psp/lib/
+psp/lib/libyaml.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/libyaml/
+psp/share/licenses/libyaml/License
+

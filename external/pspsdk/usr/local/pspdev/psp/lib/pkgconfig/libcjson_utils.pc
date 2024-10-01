@@ -1,0 +1,10 @@
+libdir=${PSPDEV}/psp/lib
+includedir=${PSPDEV}/psp/include
+
+Name: libcjson_utils
+Version: 1.7.16
+Description: An implementation of JSON Pointer, Patch and Merge Patch based on cJSON.
+URL: https://github.com/DaveGamble/cJSON
+Libs: -L${libdir} -lcjson_utils
+Cflags: -I${includedir} -I${includedir}/cjson
+Requires: libcjson

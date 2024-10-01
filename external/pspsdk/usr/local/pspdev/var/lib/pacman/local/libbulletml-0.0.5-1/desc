@@ -1,0 +1,36 @@
+%NAME%
+libbulletml
+
+%VERSION%
+0.0.5-1
+
+%BASE%
+libbulletml
+
+%DESC%
+Bullet Markup Language for PSP
+
+%URL%
+https://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486879
+
+%INSTALLDATE%
+1691496688
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+395604
+
+%LICENSE%
+BSD
+
+%VALIDATION%
+sha256
+

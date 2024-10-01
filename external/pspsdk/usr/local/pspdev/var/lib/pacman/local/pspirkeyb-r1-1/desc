@@ -1,0 +1,36 @@
+%NAME%
+pspirkeyb
+
+%VERSION%
+r1-1
+
+%BASE%
+pspirkeyb
+
+%DESC%
+a library for using IRDA keyboards with Playstation Portable
+
+%URL%
+https://github.com/pspdev/psp-ports
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486875
+
+%INSTALLDATE%
+1691496691
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+135283
+
+%LICENSE%
+LGPL2.1
+
+%VALIDATION%
+sha256
+

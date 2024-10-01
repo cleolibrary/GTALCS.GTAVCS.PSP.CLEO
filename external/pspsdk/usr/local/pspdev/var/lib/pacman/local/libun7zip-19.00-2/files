@@ -1,0 +1,14 @@
+%FILES%
+psp/
+psp/include/
+psp/include/un7zip.h
+psp/lib/
+psp/lib/libun7zip.a
+psp/share/
+psp/share/doc/
+psp/share/doc/libun7zip/
+psp/share/doc/libun7zip/README.md
+psp/share/licenses/
+psp/share/licenses/libun7zip/
+psp/share/licenses/libun7zip/LICENSE
+

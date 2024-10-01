@@ -1,0 +1,16 @@
+if [ ! -e "/etc/pki/ca-trust/ca-legacy.conf" ]
+then
+    /usr/bin/mkdir -p "/etc/pki/ca-trust"
+    /usr/bin/cp "/etc/defaults/etc/pki/ca-trust/ca-legacy.conf" "/etc/pki/ca-trust/ca-legacy.conf"
+else
+        if [ -f /etc/pki/ca-trust/ca-legacy.conf  -a  -x /usr/bin/diff ]
+        then
+            /usr/bin/mkdir -p "/var/cache/setup/etc/pki/ca-trust"
+            /usr/bin/rm -f "/var/cache/setup//etc/pki/ca-trust/ca-legacy.conf.diff"
+            /usr/bin/diff -wut "/etc/pki/ca-trust/ca-legacy.conf" "/etc/defaults/etc/pki/ca-trust/ca-legacy.conf" > "/var/cache/setup//etc/pki/ca-trust/ca-legacy.conf.diff" ||
+              echo "Defaults for /etc/pki/ca-trust/ca-legacy.conf differ from actual file, please check /var/cache/setup//etc/pki/ca-trust/ca-legacy.conf.diff"
+        fi
+fi
+
+/usr/bin/ca-legacy install
+/usr/bin/update-ca-trust

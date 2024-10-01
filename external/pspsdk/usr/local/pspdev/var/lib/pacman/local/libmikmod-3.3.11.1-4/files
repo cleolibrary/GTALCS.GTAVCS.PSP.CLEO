@@ -1,0 +1,17 @@
+%FILES%
+psp/
+psp/bin/
+psp/bin/libmikmod-config
+psp/include/
+psp/include/mikmod.h
+psp/lib/
+psp/lib/libmikmod.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/libmikmod.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/libmikmod/
+psp/share/licenses/libmikmod/AUTHORS
+psp/share/licenses/libmikmod/COPYING.LESSER
+psp/share/licenses/libmikmod/COPYING.LIB
+

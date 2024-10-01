@@ -1,0 +1,36 @@
+%NAME%
+libxmp
+
+%VERSION%
+4.5.0-2
+
+%BASE%
+libxmp
+
+%DESC%
+Libxmp is a library that renders module files to PCM data
+
+%URL%
+https://github.com/libxmp/libxmp
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486839
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+1260770
+
+%LICENSE%
+GPL2
+
+%VALIDATION%
+sha256
+

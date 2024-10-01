@@ -1,0 +1,36 @@
+%NAME%
+libintrafont
+
+%VERSION%
+4.0-1
+
+%BASE%
+libintrafont
+
+%DESC%
+A bitmap font library using the PSP's internal fonts (firmware pgf and bwfon files)
+
+%URL%
+https://github.com/pspdev/libintrafont
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486801
+
+%INSTALLDATE%
+1691496690
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+53467
+
+%LICENSE%
+cc-by-sa-3.0
+
+%VALIDATION%
+sha256
+

@@ -1,0 +1,15 @@
+%FILES%
+psp/
+psp/bin/
+psp/bin/sq
+psp/bin/sq_static
+psp/lib/
+psp/lib/libsqstdlib.a
+psp/lib/libsqstdlib_static.a
+psp/lib/libsquirrel.a
+psp/lib/libsquirrel_static.a
+psp/share/
+psp/share/licenses/
+psp/share/licenses/squirrel/
+psp/share/licenses/squirrel/COPYRIGHT
+

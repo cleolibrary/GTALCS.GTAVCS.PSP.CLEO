@@ -1,0 +1,13 @@
+%FILES%
+psp/
+psp/include/
+psp/include/xmp.h
+psp/lib/
+psp/lib/libxmp.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/libxmp.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/libxmp/
+psp/share/licenses/libxmp/COPYING.LIB
+

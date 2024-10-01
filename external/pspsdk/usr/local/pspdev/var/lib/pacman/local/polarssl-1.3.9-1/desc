@@ -1,0 +1,36 @@
+%NAME%
+polarssl
+
+%VERSION%
+1.3.9-1
+
+%BASE%
+polarssl
+
+%DESC%
+Secure Socket Layer library
+
+%URL%
+https://www.trustedfirmware.org/projects/mbed-tls/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486865
+
+%INSTALLDATE%
+1691496691
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+1358143
+
+%LICENSE%
+GPL2 license
+
+%VALIDATION%
+sha256
+

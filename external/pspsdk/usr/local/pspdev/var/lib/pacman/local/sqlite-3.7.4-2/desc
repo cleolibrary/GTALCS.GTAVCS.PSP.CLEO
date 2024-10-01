@@ -1,0 +1,36 @@
+%NAME%
+sqlite
+
+%VERSION%
+3.7.4-2
+
+%BASE%
+sqlite
+
+%DESC%
+SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine
+
+%URL%
+https://www.sqlite.org/
+
+%ARCH%
+mips
+
+%BUILDDATE%
+1691486890
+
+%INSTALLDATE%
+1691496692
+
+%PACKAGER%
+Unknown Packager
+
+%SIZE%
+1149966
+
+%LICENSE%
+custom:Public Domain
+
+%VALIDATION%
+sha256
+

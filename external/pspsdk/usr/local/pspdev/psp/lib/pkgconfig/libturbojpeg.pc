@@ -1,0 +1,10 @@
+prefix=${PSPDEV}/psp
+exec_prefix=${PSPDEV}/psp
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libturbojpeg
+Description: A SIMD-accelerated JPEG codec that provides the TurboJPEG API
+Version: 2.1.1
+Libs: -L${libdir} -lturbojpeg
+Cflags: -I${includedir}

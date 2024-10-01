@@ -1,0 +1,14 @@
+%FILES%
+psp/
+psp/include/
+psp/include/SDL/
+psp/include/SDL/SDL_image.h
+psp/lib/
+psp/lib/libSDL_image.a
+psp/lib/pkgconfig/
+psp/lib/pkgconfig/SDL_image.pc
+psp/share/
+psp/share/licenses/
+psp/share/licenses/sdl-image/
+psp/share/licenses/sdl-image/COPYING
+
