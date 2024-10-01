@@ -14,7 +14,7 @@ You are using this application at your own risk, you agree to take full responsi
 
 ## Changes in 2.0.2
 
-- Menu opening is swapped, open CLEO menu with holding start, open main menu with pressing start
+- Menu opening behavior is changed, press [start] to open the main menu, press [start] again to open cleo menu, press [circle] to close main menu without opening cleo menu.
 - Popup information is hidden, to allow vanilla game experience
 
 ## Changes in 2.0.1
@@ -33,7 +33,7 @@ You are using this application at your own risk, you agree to take full responsi
 
 ## Scripts
 
-CLEO PSP is using *.csa and *.csi script extensions, *.csa scripts start just after the game loads and *.csi ones only when you directly invoke them via ingame script menu. To open the menu perform a slide from screen top to bottom thru center, arrow popup at start should give a tip, this one is related to the mobile game series only. In order to open the menu on PSP hold [start] and you will see cleo menu, pause screen still can be accessed if you press [start].
+CLEO PSP is using *.csa and *.csi script extensions, *.csa scripts start just after the game loads and *.csi ones only when you directly invoke them via ingame script menu. To open the menu perform a slide from screen top to bottom thru center, arrow popup at start should give a tip, this one is related to the mobile game series only. In order to open the menu on PSP, press [start], and then [start] again, and you will see cleo menu.
 In order to install scripts manually, put scripts in `%sdcard%/PSP/PLUGINS/cleo/%game%` where the `%game%` is either "lcs" or "vcs".
 
 ## Plugins

@@ -114,7 +114,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-*.exp
 *.lib
 
 # Chutzpah Test files
@@ -321,4 +320,4 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 
-!source/*.PPSSPP.*/**/*.exp
+!source/**/*.exp

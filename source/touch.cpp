@@ -139,8 +139,8 @@ namespace touch
 	void psp_input_event(SceCtrlData *pad_data)
 	{
 		menu_button_event((pad_data->Buttons & PSP_CTRL_START) != 0);
-		if (menu_button_state && !menu_button_pressed_timed(2000))
-			pad_data->Buttons &= ~(uint32_t)PSP_CTRL_START;
+		//if (menu_button_state && !menu_button_pressed_timed(2000))
+		//	pad_data->Buttons &= ~(uint32_t)PSP_CTRL_START;
 
 		#define CONTROL_EVENT(control) control_event(CTRL_##control, (pad_data->Buttons & PSP_CTRL_##control) != 0)
 

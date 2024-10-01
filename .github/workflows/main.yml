@@ -1,0 +1,92 @@
+name: GitHub Actions Build
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Create a release"
+        type: choice
+        required: false
+        default: 'false'
+        options:
+          - 'false'
+          - 'true'
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@main
+
+    - name: Configure build
+      run: ./premake5 vs2022
+
+    - name: Build
+      run: |
+        msbuild -m build/GTALCS.GTAVCS.PSP.CLEO.sln /property:Configuration=Release
+
+    - name: Pack binaries
+      shell: cmd
+      run: release.bat
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cleopsp
+        path: |
+          data//*
+          !**/*.elf
+
+    - name: Get release info
+      if: github.event.inputs.release != '' && github.event.inputs.release != 'false'
+      id: release_info
+      uses: cardinalby/git-get-release-action@1.2.5
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag: latest
+
+    - name: Upload Release
+      if: |
+        github.event.inputs.release == 'true' &&
+        github.ref_name == 'main' &&
+        (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+        github.repository == 'cleolibrary/GTALCS.GTAVCS.PSP.CLEO'
+      uses: ncipollo/release-action@main
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+        name: ${{ steps.release_info.outputs.name }}
+        body: ${{ steps.release_info.outputs.body }}
+        tag: ${{ steps.release_info.outputs.tag_name }}
+        artifacts: cleopsp.zip
+
+    - name: Update Tag
+      if: |
+        github.event.inputs.release == 'true' &&
+        github.ref_name == 'main' &&
+        (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+        github.repository == 'cleolibrary/GTALCS.GTAVCS.PSP.CLEO'
+      uses: richardsimko/update-tag@v1.0.6
+      with:
+        tag_name: ${{ steps.release_info.outputs.tag_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

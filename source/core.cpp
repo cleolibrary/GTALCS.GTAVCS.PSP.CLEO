@@ -1952,12 +1952,12 @@ namespace core
 		}
 		case OP_SHOW_MENU_OPEN_ARROW:
 		{
-			ui::show_arrow();
+			//ui::show_arrow();
 			return true;
 		}
 		case OP_HIDE_MENU_OPEN_ARROW:
 		{
-			ui::hide_arrow();
+			//ui::hide_arrow();
 			return true;
 		}
 		case OP_CREATE_MENU:

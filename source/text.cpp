@@ -23,13 +23,13 @@ namespace text
 		// startup string replacement shown in GTA3 and GTAVC
 		add_gxt_entry("SPLASH", VERSION_STR);
 		// script menu
-		add_gxt_entry("CLDSC", VERSION_STR "~n~" COPYRIGHT "~n~" WEBPAGE); // SA, LCS, VCS PSP
+		//add_gxt_entry("CLDSC", VERSION_STR "~n~" COPYRIGHT "~n~" WEBPAGE); // SA, LCS, VCS PSP
 #ifdef ANDROID
 		add_gxt_entry("CLDSCL", core::GetGame() == core::GTA3
 			? CLEO_ANDROID "               " VERSION_DATE "                   " COPYRIGHT "          " WWW_WEBPAGE	// III
 			: CLEO_ANDROID "~n~" VERSION_DATE "~n~" COPYRIGHT "~n~" WWW_WEBPAGE);	// VC		 
 #else
-		add_gxt_entry("CLDSCL", VERSION_STR "     " COPYRIGHT "  " WWW_WEBPAGE); // LCS PSP
+		//add_gxt_entry("CLDSCL", VERSION_STR "     " COPYRIGHT "  " WWW_WEBPAGE); // LCS PSP
 #endif
 		add_gxt_entry("CLMNU", "cleo menu");
 		add_gxt_entry("CLMNUD", "Touch screen up or down to select a script, center to start it");
