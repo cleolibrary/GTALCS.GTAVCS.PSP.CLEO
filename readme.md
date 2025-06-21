@@ -1,4 +1,4 @@
-# CLEO PSP / CLEO ANDROID
+# CLEO PSP
 
 Version: 2.0.2
 
