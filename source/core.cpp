@@ -12,6 +12,7 @@
 #include "plugins.h"
 #include "mutex.h"
 #include "memutils.h"
+#include "unaligned.h"
 
 #ifndef ANDROID
 #include "psplang.h"
@@ -121,14 +122,16 @@ namespace core
 
 	std::vector<t_mutex_var> mutex_vars;
 
+	// The offsets in the CRunningScript structure differ per game and aren't all naturally
+	// aligned, so never dereference them directly - see unaligned.h.
 	template <typename T> inline T getfield(ptr structure, uint32_t offset)
 	{
-		return *cast<T *>(structure + offset);
+		return read_unaligned<T>(structure + offset);
 	}
 
 	template <typename T> inline void setfield(ptr structure, uint32_t offset, T val)
 	{
-		*cast<T *>(structure + offset) = val;
+		write_unaligned<T>(structure + offset, val);
 	}
 
 	template <typename T> inline T select(T val_3, T val_vc, T val_sa, T val_lcs, T val_vcs)
@@ -1356,7 +1359,8 @@ namespace core
 
 			bool cond = getfield<uint8_t>(handle, select(0x78, 0x79, 0xE5, 0x20D, 0x209)) != 0; // thread if cond
 
-			uint16_t op = *cast<uint16_t *>(ip);
+			// the command stream isn't 4-byte aligned, the opcode can sit on an odd address
+			uint16_t op = read_u16(ip);
 
 			if (handle_found)
 			{
@@ -1364,7 +1368,7 @@ namespace core
 #ifdef ANDROID
 				bool check_touch_point = (game != GTALCS) && (game != GTAVCS) &&
 										 (op == OP_KEY || op == OP_NOT_KEY) &&
-										 (*cast<uint16_t *>(ip + 2) == 0x304) &&
+										 (read_u16(ip + 2) == 0x304) &&
 										 (*cast<uint8_t *>(ip + 4) == 0x04);
 				if (check_touch_point)
 				{
@@ -1393,8 +1397,8 @@ namespace core
 						exit(1);
 					}
 					ip++;
-					// read offset as int
-					int32_t offset_signed = *cast<int32_t *>(ip);
+					// read offset as int (ip is odd here: it points past the 1-byte param type)
+					int32_t offset_signed = read_i32(ip);
 					ip += 4;
 					// calc offset from ScriptSpace
 					uint32_t offset = (offset_signed >= 0) ? (cast<uint32_t>(code) + offset_signed) : (cast<uint32_t>(code) - offset_signed);

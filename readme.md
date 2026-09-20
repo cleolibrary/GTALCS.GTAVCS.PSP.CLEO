@@ -1,8 +1,8 @@
-# CLEO PSP / CLEO ANDROID
+# CLEO PSP
 
-Version: 2.0.2
+Version: 2.0.3
 
-Date: Oct 2024
+Date: Sep 2026
 
 # Description
 
@@ -11,6 +11,10 @@ CLEO PSP is a version of the top-most popular GTA PC version add-on - CLEO libra
 # Disclaimer and Limitation of Liability
 
 You are using this application at your own risk, you agree to take full responsibility for anything that this application can cause. You are not allowed to install the application or any of the application components if you don't agree with these terms.
+
+## Changes in 2.0.3
+
+- fixed a crash on PPSSPP builds which check memory alignment (Aug 2026 and later), the script command stream was read with unaligned 32-bit loads - which the PSP traps on and which current PPSSPP reports as an invalid memory access and returns as 0, corrupting the script ip on jumps and calls (see the "Memory access" section for developers)
 
 ## Changes in 2.0.2
 
@@ -40,7 +44,16 @@ In order to install scripts manually, put scripts in `%sdcard%/PSP/PLUGINS/cleo/
 
 CLEO PSP supports custom plugins (*.prx), if you just want to install CLEO PSP plugin then copy the thing in the same folder you would put *.csa/csi script (%game% folder). See developers section if you want to know more about this.
 
-# Developers
+## Building
+
+PSP (Windows, uses the pspsdk bundled in `external/pspsdk`, no separate installation needed):
+
+```
+cd source
+..\external\pspsdk\vsmake.ps1
+```
+
+The build produces `cleo.elf` and `cleo.prx` in `data/memstick/PSP/PLUGINS/cleo/`, `release.bat` packs `data` into `cleopsp.zip`.
 
 ## Scripts
 

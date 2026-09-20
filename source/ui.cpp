@@ -5,6 +5,7 @@
 #include "touch.h"
 #include "strutils.h"
 #include "memutils.h"
+#include "unaligned.h"
 
 #ifndef ANDROID
 #include "psplang.h"
@@ -174,7 +175,7 @@ namespace ui
 			fd->m_fScaleX = scalex;
 			fd->m_fScaleY = scaley;
 			// color
-			fd->m_dwColor = *cast<uint32_t*>(rgba);
+			fd->m_dwColor = read_u32(rgba);
 			// common
 			fd->m_bBackground = false;
 			fd->m_bProp = true;
@@ -337,7 +338,7 @@ namespace ui
 			fd->m_fScaleX = scalex;
 			fd->m_fScaleY = scaley;
 			// color
-			fd->m_dwColor = *cast<uint32_t*>(rgba);
+			fd->m_dwColor = read_u32(rgba);
 			// common
 			fd->m_bBackground = false;
 			fd->m_bFlash = false;
@@ -495,7 +496,7 @@ namespace ui
 			fd->m_fScaleX = scalex;
 			fd->m_fScaleY = scaley;
 			// color
-			fd->m_dwColor = *cast<uint32_t*>(rgba);
+			fd->m_dwColor = read_u32(rgba);
 			// common
 			fd->m_bBackground = false;
 			fd->m_bFlash = false;
@@ -680,7 +681,7 @@ namespace ui
 			fd->m_fScaleX = scalex;
 			fd->m_fScaleY = scaley;
 			// color
-			fd->m_dwColor = *cast<uint32_t*>(rgba);
+			fd->m_dwColor = read_u32(rgba);
 			// common
 			fd->m_bBackground = false;
 			fd->m_bFlash = false;

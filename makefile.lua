@@ -42,7 +42,7 @@ str = [[
 EE_BIN = ../../data/%s/%s.elf
 EE_OBJS = %s 
 
-CFLAGS = -O0 -Os -G0 -Wall -fshort-wchar -fno-pic -mno-check-zero-division -fpack-struct=16
+CFLAGS = -O0 -Os -G0 -Wall -fshort-wchar -fno-pic -mno-check-zero-division -mpreferred-stack-boundary=4 -fpack-struct=16
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 
