@@ -143,5 +143,5 @@ project "cleo"
    kind "Makefile"
    add_pspsdk()
    targetextension ".prx"
-   setbuildpaths_psp("Z:/WFP/Games/PPSSPP/", "PPSSPPWindows64.exe", "memstick/PSP/PLUGINS/cleo/", "%{wks.location}/../external/pspsdk/vsmake.ps1", "%{wks.location}/../source/", "cleo")
+   setbuildpaths_psp("Z:/WFP/Games/PPSSPP/", "PPSSPPWindows64.exe", "memstick/PSP/PLUGINS/cleo/", "%{wks.location}/../external/pspsdk/plugins/build-module.ps1", "%{wks.location}/../source/", "cleo")
    writemakefile_psp("cleo", "utils.o", "text.o", "libres.o", "armhook.o", "touch.o", "ui.o", "plugins.o", "pattern.o", "core.o", "mutex.o", "strutils.o", "memutils.o", "psplang.o")
