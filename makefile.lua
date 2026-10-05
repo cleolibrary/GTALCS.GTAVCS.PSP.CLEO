@@ -1,33 +1,18 @@
-   function writemakefile_psp(prj_name, ...)
-      local args = {...}
-      local files = "main.o";
-      for i, v in ipairs( args ) do
-          files = files .. " " .. v:match("(.+)%..+") .. ".o"
-      end
-      files = string.gsub(files, "^%s*(.-)%s*$", "%1")
-      file = io.open("source/makefile", "w")
-      if (file) then
-str = [[
-TARGET = ../data/memstick/PSP/PLUGINS/%s/%s
-OBJS = %s 
-LIBS = -lstdc++ -lm
-
-BUILD_PRX=1
-PRX_EXPORTS=exports.exp
-
-INCDIR = 
-CFLAGS = -Os -G0 -Wall -D PSP -mpreferred-stack-boundary=4 -mabi=eabi
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
-ASFLAGS = $(CFLAGS)
-LIBDIR =
-
-PSPSDK=$(shell psp-config --pspsdk-path)
-include $(PSPSDK)/lib/build.mak
-]]
-         file:write(string.format(str, prj_name, prj_name, files))
-         file:close()
-      end
+function writemakefile_psp(prj_name, ...)
+   local sources = { "main.cpp" }
+   for _, object in ipairs({...}) do table.insert(sources, (object:gsub("%.o$", ".cpp"))) end
+   local quoted = {}
+   for _, source in ipairs(sources) do table.insert(quoted, string.format("%q", source)) end
+   if not os.isfile("source/module.json") then
+      io.writefile("source/module.json", '{\n  "sources": [' .. table.concat(quoted, ", ") .. '],\n  "output": "../data/memstick/PSP/PLUGINS/' .. prj_name .. '/' .. prj_name .. '.prx",\n  "exports": "exports.exp",\n  "startup": "crt",\n  "defines": ["PSP"],\n  "c_flags": ["-Os", "-G0", "-Wall", "-mpreferred-stack-boundary=4", "-mabi=eabi"],\n  "libraries": ["-lstdc++", "-lm"]\n}\n')
    end
+   io.writefile("source/makefile", [[.PHONY: all clean
+all:
+	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json
+clean:
+	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json -Clean
+]])
+end
 
 function writemakefile_ps2(prj_name, scripts_addr, base, libs, ...)
    local args = {...}

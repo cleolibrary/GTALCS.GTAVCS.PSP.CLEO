@@ -48,55 +48,26 @@ workspace "GTALCS.GTAVCS.PSP.CLEO"
    end
    
    function setbuildpaths_psp(gamepath, exepath, scriptspath, pspsdkpath, sourcepath, prj_name)
-      -- local pbcmd = {}
-      -- for k,v in pairs(pbcommands) do
-      --   pbcmd[k] = v
-      -- end
-      if (gamepath) then
-        buildcommands {"setlocal EnableDelayedExpansion"}
-        rebuildcommands {"setlocal EnableDelayedExpansion"}
-        local ppsspppath = os.getenv "PPSSPPMemstick"
-        if (ppsspppath == nil) then
-            buildcommands {"set _PPSSPPMemstick=" .. gamepath .. "memstick/PSP"}
-            rebuildcommands {"set _PPSSPPMemstick=" .. gamepath .. "memstick/PSP"}
-        else
-            buildcommands {"set _PPSSPPMemstick=!PPSSPPMemstick!"}
-            rebuildcommands {"set _PPSSPPMemstick=!PPSSPPMemstick!"}
-        end
-         
-        buildcommands {
-        "powershell -ExecutionPolicy Bypass -File \"" .. pspsdkpath .. "\" -C \"" .. sourcepath .. "\"\r\n" ..
-        "if !errorlevel! neq 0 exit /b !errorlevel!\r\n" ..
-        "if not defined _PPSSPPMemstick goto :eof\r\n" ..
-        "if not exist !_PPSSPPMemstick! goto :eof\r\n" ..
-        "if not exist !_PPSSPPMemstick!/PLUGINS/ mkdir !_PPSSPPMemstick!/PLUGINS/\r\n" ..
-        "set target=!_PPSSPPMemstick!/PLUGINS/$(ProjectName)\r\n" ..
-        "copy /y $(NMakeOutput) \"!target!\"\r\n"
-        }
-        rebuildcommands {
-        "powershell -ExecutionPolicy Bypass -File \"" .. pspsdkpath .. "\" -C \"" .. sourcepath .. "\" clean\r\n" ..
-        "powershell -ExecutionPolicy Bypass -File \"" .. pspsdkpath .. "\" -C \"" .. sourcepath .. "\"\r\n" ..
-        "if !errorlevel! neq 0 exit /b !errorlevel!\r\n" ..
-        "if not defined _PPSSPPMemstick goto :eof\r\n" ..
-        "if not exist !_PPSSPPMemstick! goto :eof\r\n" ..
-        "set target=!_PPSSPPMemstick!/PLUGINS/$(ProjectName)\r\n" ..
-        "copy /y $(NMakeOutput) \"!target!\"\r\n"
-        }
-        cleancommands {
-        "setlocal EnableDelayedExpansion\r\n" ..
-        "powershell -ExecutionPolicy Bypass -File \"" .. pspsdkpath .. "\" -C \"" .. sourcepath .. "\" clean\r\n" ..
-        "if !errorlevel! neq 0 exit /b !errorlevel!\r\n"
-        }
-        debugdir (gamepath)
-        if (exepath) then
-           debugcommand (gamepath .. exepath)
-           dir, file = exepath:match'(.*/)(.*)'
-           debugdir (gamepath .. (dir or ""))
-        end
+      local command = 'powershell -NoProfile -ExecutionPolicy Bypass -File "%{wks.location}/../external/pspsdk/plugins/build-module.ps1" -Project "' .. sourcepath .. 'module.json"'
+      local deploy = {}
+      local memstick = os.getenv("PPSSPPMemstick")
+      if not memstick and gamepath and os.isdir(gamepath) then memstick = path.join(gamepath, "memstick/PSP") end
+      if memstick then
+         local target = path.join(memstick, "PLUGINS", prj_name)
+         deploy = { 'if not exist "' .. target .. '" mkdir "' .. target .. '"',
+            'copy /y "$(NMakeOutput)" "' .. target .. '"' }
       end
-      targetdir ("data/" .. scriptspath)
+      buildcommands { command, 'if errorlevel 1 exit /b %errorlevel%', deploy }
+      rebuildcommands { command .. ' -Clean', 'if errorlevel 1 exit /b %errorlevel%', command,
+         'if errorlevel 1 exit /b %errorlevel%', deploy }
+      cleancommands { command .. ' -Clean' }
+      if gamepath then
+         debugdir(gamepath)
+         debugcommand(path.join(gamepath, exepath))
+      end
+      targetdir("data/" .. scriptspath)
    end
-   
+
    function setbuildpaths_ps2(gamepath, exepath, scriptspath, ps2sdkpath, sourcepath, prj_name)
       -- local pbcmd = {}
       -- for k,v in pairs(pbcommands) do
@@ -151,7 +122,7 @@ workspace "GTALCS.GTAVCS.PSP.CLEO"
    function add_pspsdk()
       includedirs { "external/pspsdk/usr/local/pspdev/psp/sdk/include" }
       includedirs { "external/pspsdk/usr/local/pspdev/bin" }
-      files { "source/*.h", "source/*.c", "source/*.cpp", "source/makefile" }
+      files { "source/*.h", "source/*.c", "source/*.cpp", "source/makefile", "source/module.json", "source/exports.exp" }
    end
 
    function add_ps2sdk()

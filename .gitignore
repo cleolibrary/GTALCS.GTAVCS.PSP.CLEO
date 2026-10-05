@@ -25,6 +25,7 @@ data/**/binkw32.dll
 #PSP
 data/**/*.elf
 data/**/*.prx
+*.prx.objects/
 data/**/*.map
 source/**/*.o
 source/OBJS

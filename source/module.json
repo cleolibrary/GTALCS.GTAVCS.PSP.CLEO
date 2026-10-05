@@ -1,0 +1,9 @@
+{
+  "sources": ["main.cpp", "utils.cpp", "text.cpp", "libres.cpp", "armhook.cpp", "touch.cpp", "ui.cpp", "plugins.cpp", "pattern.cpp", "core.cpp", "mutex.cpp", "strutils.cpp", "memutils.cpp", "psplang.cpp"],
+  "output": "../data/memstick/PSP/PLUGINS/cleo/cleo.prx",
+  "exports": "exports.exp",
+  "startup": "crt",
+  "defines": ["PSP"],
+  "c_flags": ["-Os", "-G0", "-Wall", "-mpreferred-stack-boundary=4", "-mabi=eabi"],
+  "libraries": ["-lstdc++", "-lm"]
+}

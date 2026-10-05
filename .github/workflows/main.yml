@@ -54,6 +54,8 @@ jobs:
         path: |
           data//*
           !**/*.elf
+          !**/*.map
+          !**/*.prx.objects/**
 
     - name: Get release info
       if: github.event.inputs.release != '' && github.event.inputs.release != 'false'
