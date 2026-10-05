@@ -6,11 +6,12 @@ function writemakefile_psp(prj_name, ...)
    if not os.isfile("source/module.json") then
       io.writefile("source/module.json", '{\n  "sources": [' .. table.concat(quoted, ", ") .. '],\n  "output": "../data/memstick/PSP/PLUGINS/' .. prj_name .. '/' .. prj_name .. '.prx",\n  "exports": "exports.exp",\n  "startup": "crt",\n  "defines": ["PSP"],\n  "c_flags": ["-Os", "-G0", "-Wall", "-mpreferred-stack-boundary=4", "-mabi=eabi"],\n  "libraries": ["-lstdc++", "-lm"]\n}\n')
    end
-   io.writefile("source/makefile", [[.PHONY: all clean
+   io.writefile("source/makefile", [[CONFIGURATION ?= Release
+.PHONY: all clean
 all:
-	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json
+	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json -Configuration "$(CONFIGURATION)"
 clean:
-	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json -Clean
+	powershell -NoProfile -ExecutionPolicy Bypass -File "../external/pspsdk/plugins/build-module.ps1" -Project module.json -Configuration "$(CONFIGURATION)" -Clean
 ]])
 end
 

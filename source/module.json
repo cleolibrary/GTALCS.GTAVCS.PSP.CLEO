@@ -1,9 +1,38 @@
 {
-  "sources": ["main.cpp", "utils.cpp", "text.cpp", "libres.cpp", "armhook.cpp", "touch.cpp", "ui.cpp", "plugins.cpp", "pattern.cpp", "core.cpp", "mutex.cpp", "strutils.cpp", "memutils.cpp", "psplang.cpp"],
+  "sources": [
+    "main.cpp",
+    "utils.cpp",
+    "text.cpp",
+    "libres.cpp",
+    "armhook.cpp",
+    "touch.cpp",
+    "ui.cpp",
+    "plugins.cpp",
+    "pattern.cpp",
+    "core.cpp",
+    "mutex.cpp",
+    "strutils.cpp",
+    "memutils.cpp",
+    "psplang.cpp",
+    "../external/injector/include/psp/memalloc.c",
+    "../external/injector/include/psp/patterns.c"
+  ],
   "output": "../data/memstick/PSP/PLUGINS/cleo/cleo.prx",
   "exports": "exports.exp",
   "startup": "crt",
-  "defines": ["PSP"],
-  "c_flags": ["-Os", "-G0", "-Wall", "-mpreferred-stack-boundary=4", "-mabi=eabi"],
-  "libraries": ["-lstdc++", "-lm"]
+  "defines": ["PSP_HOOK_RAM_END=0x0DD00000",
+    "PSP",
+    "MEM_CUSTOM_TOTAL_SIZE=16384"
+  ],
+  "c_flags": [
+    "-Os",
+    "-G0",
+    "-Wall",
+    "-mpreferred-stack-boundary=4",
+    "-mabi=eabi"
+  ],
+  "libraries": [
+    "-lstdc++",
+    "-lm"
+  ]
 }

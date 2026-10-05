@@ -48,7 +48,7 @@ workspace "GTALCS.GTAVCS.PSP.CLEO"
    end
    
    function setbuildpaths_psp(gamepath, exepath, scriptspath, pspsdkpath, sourcepath, prj_name)
-      local command = 'powershell -NoProfile -ExecutionPolicy Bypass -File "%{wks.location}/../external/pspsdk/plugins/build-module.ps1" -Project "' .. sourcepath .. 'module.json"'
+      local command = 'powershell -NoProfile -ExecutionPolicy Bypass -File "%{wks.location}/../external/pspsdk/plugins/build-module.ps1" -Project "' .. sourcepath .. 'module.json" -Configuration "%{cfg.buildcfg:find("Debug") and "Debug" or "Release"}"'
       local deploy = {}
       local memstick = os.getenv("PPSSPPMemstick")
       if not memstick and gamepath and os.isdir(gamepath) then memstick = path.join(gamepath, "memstick/PSP") end

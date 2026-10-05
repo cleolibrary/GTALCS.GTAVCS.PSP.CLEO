@@ -1,3 +1,6 @@
 [submodule "pspsdk"]
 	path = external/pspsdk
 	url = https://github.com/ThirteenAG/pspsdk.git
+[submodule "external/injector"]
+	path = external/injector
+	url = https://github.com/ThirteenAG/injector

@@ -195,7 +195,7 @@ extern "C" {
 #else
 	
 #ifndef __INTELLISENSE__
-PSP_MODULE_INFO(CLEO, 0x1000, 1, 1);
+PSP_MODULE_INFO("CLEO", 0x1000, 1, 1);
 PSP_HEAP_SIZE_KB(256);
 #endif
 

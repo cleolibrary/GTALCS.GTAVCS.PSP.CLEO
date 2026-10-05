@@ -234,7 +234,7 @@ extern "C" __attribute__ ((visibility ("default"))) void plugin_init(cleo_ifs_t 
 // Extend the value only when actually required (e.g. cleo.prx is using 256 KB sized heap).
 
 #ifndef __INTELLISENSE__
-PSP_MODULE_INFO(PLUGIN, 0x1000, 1, 1);
+PSP_MODULE_INFO("PLUGIN", 0x1000, 1, 1);
 //PSP_HEAP_SIZE_KB(64);
 #endif
 

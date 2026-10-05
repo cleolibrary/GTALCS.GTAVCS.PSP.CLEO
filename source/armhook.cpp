@@ -2,6 +2,9 @@
 #include "libres.h"
 #include "memutils.h"
 #include "utils.h"
+#ifndef ANDROID
+#include "guest-hooks.h"
+#endif
 
 namespace armhook
 {
@@ -102,25 +105,13 @@ namespace armhook
 
 #else
 
-	void init()
-	{
-	}
+	void init() { guest_hooks::initialize(); }
 
 	void replace_mips_call(ptr addr, ptr func_to)
-	{
-		memutils::mem_write_mips_call(addr, func_to, false);
-	}
+	{ guest_hooks::replace_call(addr, func_to); }
 
-	void hook_mips_func(ptr func, uint32_t startSize, ptr func_to, ptr *func_orig)
-	{
-		uint8_t *space = cast<uint8_t *>(malloc(startSize + 32));
-		while ((cast<uint32_t>(space) & 0x0F) != (cast<uint32_t>(func) & 0x0F))
-			space++;
-		memutils::mem_write_arr(space, func, startSize);
-		memutils::mem_write_mips_jmp(space + startSize, func + startSize, true);
-		*func_orig = space;
-		memutils::mem_write_mips_jmp(func, func_to, true);
-	}
+	void hook_mips_func(ptr func, uint32_t startSize, ptr func_to, ptr* func_orig)
+	{ guest_hooks::hook_function(func, startSize, func_to, func_orig); }
 
 	std::vector<ptr> find_mips_func_calls(ptr func)
 	{

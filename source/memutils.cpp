@@ -1,9 +1,13 @@
 #include "memutils.h"
+#ifndef ANDROID
+#include "guest-hooks.h"
+#endif
 
 namespace memutils
 {
-	void mem_write_arr(uint8_t *addr, uint8_t *arr, uint32_t size, bool protect)
-	{
+    void mem_write_arr(uint8_t* addr, uint8_t* arr, uint32_t size, bool protect)
+    {
+        if (!size) return;
 #ifdef ANDROID
 		if (protect)
 		{
@@ -14,14 +18,18 @@ namespace memutils
 					pageCount++;
 			mprotect(cast<void *>(a), PAGE_SIZE * pageCount, PROT_READ | PROT_WRITE | PROT_EXEC);
 		}
+        memmove(addr, arr, size);
+#else
+        (void)protect;
+        // Remove PPSSPP markers while their original words are still recoverable.
+        auto interrupts = sceKernelCpuSuspendIntr();
+        sceKernelIcacheInvalidateRange(addr, size);
+        memmove(addr, arr, size);
+        sceKernelDcacheWritebackRange(addr, size);
+        sceKernelIcacheInvalidateRange(addr, size);
+        sceKernelCpuResumeIntr(interrupts);
 #endif
-		for (int i = 0; i < size; i++)
-			addr[i] = arr[i];
-#ifndef ANDROID
-		sceKernelDcacheWritebackInvalidateAll();
-		sceKernelIcacheClearAll();
-#endif
-	}
+    }
 
 #ifdef ANDROID
 
@@ -105,19 +113,26 @@ namespace memutils
 
 	ptr mem_read_mips_jmp(uint8_t *addr)
 	{
-		return cast<ptr>((*cast<uint32_t *>(addr) & 0x03FFFFFF) << 2);
+		uint32_t word;
+		guest_hooks::initialize();
+		guest_hooks::require(guest_hooks::backend.read(guest_hooks::backend.user, (uint32_t)(uintptr_t)addr, &word, 4) != 0, "read jump");
+		return cast<ptr>(((word & 0x03FFFFFF) << 2) | (((uint32_t)(uintptr_t)addr + 4) & 0xF0000000));
 	}
 
 	void mem_write_mips_jmp(uint8_t *addrFrom, uint8_t *addrTo, bool withNop)
 	{
 		uint64_t code = 0x08000000 | ((cast<uint32_t>(addrTo) >> 2) & 0x03FFFFFF);
-		mem_write_arr(addrFrom, cast<uint8_t *>(&code), withNop ? 8 : 4);
+		guest_hooks::require(!((uintptr_t)addrFrom & 3) && !((uintptr_t)addrTo & 3) &&
+		    ((((uintptr_t)addrFrom + 4) ^ (uintptr_t)addrTo) & 0xF0000000) == 0, "jump region");
+		guest_hooks::write_code(addrFrom, (const uint32_t*)&code, withNop ? 8 : 4);
 	}
 
 	void mem_write_mips_call(uint8_t *addrFrom, uint8_t *addrTo, bool withNop)
 	{
 		uint64_t code = 0x0C000000 | ((cast<uint32_t>(addrTo) >> 2) & 0x03FFFFFF);
-		mem_write_arr(addrFrom, cast<uint8_t *>(&code), withNop ? 8 : 4);
+		guest_hooks::require(!((uintptr_t)addrFrom & 3) && !((uintptr_t)addrTo & 3) &&
+		    ((((uintptr_t)addrFrom + 4) ^ (uintptr_t)addrTo) & 0xF0000000) == 0, "jump region");
+		guest_hooks::write_code(addrFrom, (const uint32_t*)&code, withNop ? 8 : 4);
 	}
 
 #endif
