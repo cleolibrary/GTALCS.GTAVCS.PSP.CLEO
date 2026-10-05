@@ -1,0 +1,3 @@
+[submodule "pspsdk"]
+	path = external/pspsdk
+	url = https://github.com/ThirteenAG/pspsdk.git
