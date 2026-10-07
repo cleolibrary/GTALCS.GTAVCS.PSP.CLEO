@@ -37,11 +37,11 @@ jobs:
       uses: microsoft/setup-msbuild@main
 
     - name: Configure build
-      run: ./premake5 vs2022
+      run: ./premake5 vs2026
 
     - name: Build
       run: |
-        msbuild -m build/GTALCS.GTAVCS.PSP.CLEO.sln /property:Configuration=Release
+        msbuild -m build/GTALCS.GTAVCS.PSP.CLEO.slnx /property:Configuration=Release
 
     - name: Pack binaries
       shell: cmd
