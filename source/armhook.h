@@ -1,54 +1,10 @@
 #pragma once
 
 #include "common.h"
+#include "guest-hooks.h"
 
 namespace armhook
 {
-#ifdef ANDROID
-
-	// initialize
-	void init(ptr nearSpace, uint32_t nearSize);
-	// replace call
-	void replace_thumb_call(ptr addr, ptr func_to);
-	// templated proc
-	template <typename T>
-	void replace_thumb_call(uint32_t addr, T func_to)
-	{
-		replace_thumb_call(cast<ptr>(addr), cast<ptr>(func_to));
-	}
-	// common hook proc
-	void hook_thumb_func(ptr func, uint32_t startSize, ptr func_to, ptr *func_orig);
-	// templated proc
-	template <typename T>
-	void hook_thumb_func(T func, uint32_t startSize, T func_to, T *func_orig)
-	{
-		hook_thumb_func(cast<ptr>(func),
-						startSize,
-						cast<ptr>(func_to),
-						cast<ptr *>(func_orig));
-	}
-
-	// replace call for arm
-	void replace_arm_call(ptr addr, ptr func_to);
-	// templated proc for arm
-	template <typename T>
-	void replace_arm_call(uint32_t addr, T func_to)
-	{
-		replace_arm_call(cast<ptr>(addr), cast<ptr>(func_to));
-	}
-	// common hook proc for arm
-	void hook_arm_func(ptr func, uint32_t startSize, ptr func_to, ptr *func_orig);
-	// templated proc for arm
-	template <typename T>
-	void hook_arm_func(T func, uint32_t startSize, T func_to, T *func_orig)
-	{
-		hook_arm_func(cast<ptr>(func),
-					  startSize,
-					  cast<ptr>(func_to),
-					  cast<ptr *>(func_orig));
-	}
-
-#else
 
 	// initialize
 	void init();
@@ -58,7 +14,7 @@ namespace armhook
 	template <typename T1, typename T2>
 	void replace_mips_call(T1 addr, T2 func_to)
 	{
-		replace_mips_call(cast<ptr>(addr), cast<ptr>(func_to));
+		replace_mips_call(cast<ptr>(addr), guest_hooks::bridge(func_to));
 	}
 	// common hook proc
 	void hook_mips_func(ptr func, uint32_t startSize, ptr func_to, ptr *func_orig);
@@ -68,7 +24,7 @@ namespace armhook
 	{
 		hook_mips_func(cast<ptr>(func),
 					   startSize,
-					   cast<ptr>(func_to),
+					   guest_hooks::bridge(func_to),
 					   cast<ptr *>(func_orig));
 	}
 	// common find func calls
@@ -79,6 +35,17 @@ namespace armhook
 	{
 		return find_mips_func_calls(cast<ptr>(func));
 	}
+	// Leave the renderer entry available to the widescreen drawing hooks.
+	template<class T>
+	void hook_mips_calls(T func,T callback,T* original)
+	{
+		auto calls=find_mips_func_calls(func);
+		// Without callers the CLEO menu stays hidden; the game keeps running.
+		if (!original || calls.empty()) return;
+		ptr target=guest_hooks::bridge(callback);
+		*original=cast<T>(cast<ptr>(func));
+		for (ptr address:calls) replace_mips_call(address,target);
+	}
 	// common find func calls in another func
 	std::vector<ptr> find_mips_func_calls_in_func(ptr func, ptr func_in);
 	template <typename T1, typename T2>
@@ -88,5 +55,4 @@ namespace armhook
 		return find_mips_func_calls_in_func(cast<ptr>(func), cast<ptr>(func_in));
 	}
 
-#endif
 }

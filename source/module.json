@@ -15,14 +15,17 @@
     "memutils.cpp",
     "psplang.cpp",
     "../external/injector/include/psp/memalloc.c",
-    "../external/injector/include/psp/patterns.c"
+    "../external/injector/include/psp/patterns.c",
+    "module-memory.c"
   ],
   "output": "../data/memstick/PSP/PLUGINS/cleo/cleo.prx",
   "exports": "exports.exp",
   "startup": "crt",
-  "defines": ["PSP_HOOK_RAM_END=0x0DD00000",
+  "defines": [
+    "PSP_HOOK_RAM_END=0x0DD00000",
     "PSP",
-    "MEM_CUSTOM_TOTAL_SIZE=16384"
+    "MEM_CUSTOM_TOTAL_SIZE=16384",
+    "PSP_GAME_ABI_COMPAT"
   ],
   "c_flags": [
     "-Os",

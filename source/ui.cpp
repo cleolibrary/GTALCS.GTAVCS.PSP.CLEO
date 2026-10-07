@@ -7,9 +7,7 @@
 #include "memutils.h"
 #include "unaligned.h"
 
-#ifndef ANDROID
 #include "psplang.h"
-#endif
 
 namespace ui
 {
@@ -40,507 +38,6 @@ namespace ui
 	uint8_t menu_active_item_font_color[4];
 	uint8_t menu_selected_item_font_color[4];
 
-#ifdef ANDROID
-
-	namespace gta3
-	{
-		// @CSprite2d::SetVertices
-		typedef void (*fn_CSprite2d__SetVertices)(float, float, float, float, float, float, float, float, uint8_t *, uint8_t *, uint8_t *, uint8_t *);
-		fn_CSprite2d__SetVertices CSprite2d__SetVertices;
-
-		// @RwRenderStateSet
-		typedef int32_t (*fn_RwRenderStateSet)(int32_t state, int32_t val);
-		fn_RwRenderStateSet RwRenderStateSet;
-
-		// @RwIm2DRenderPrimitive
-		typedef void (*fn_RwIm2DRenderPrimitive)(int32_t type, void *verts, int32_t count);
-		fn_RwIm2DRenderPrimitive RwIm2DRenderPrimitive;
-
-		// @CSprite2d::maVertices
-		void *CSprite2d__maVertices;
-
-		// @CHud::Draw
-		typedef void (*fn_CHud__Draw)();
-		fn_CHud__Draw _CHud__Draw, CHud__Draw_;
-		void CHud__Draw()
-		{
-			CHud__Draw_();
-			on_draw();
-		}
-
-		// @CFont::Details
-		#pragma pack(push, 1)
-		struct _CFont__Details
-		{
-			uint32_t	m_dwColor;				// 0x00
-			float		m_fScaleX;	 			// 0x04
-			float		m_fScaleY;	 			// 0x08
-			float		m_fSlant;	 			// 0x0C
-			float		m_fSlantRefPointX;		// 0x10
-			float		m_fSlantRefPointY;		// 0x14
-			bool		m_bLeftJustify;			// 0x18
-			bool		m_bCentre;				// 0x19
-			bool		m_bRightJustify;		// 0x1A
-			bool		m_bBackground;			// 0x1B
-			bool		m_bBackGroundOnlyText;	// 0x1C
-			bool		m_bProp;				// 0x1D
-			uint16_t	m_bPad0;				// 0x1E
-			float		m_fAlphaFade; 			// 0x20
-			uint32_t	m_dwBackgroundColor;	// 0x24
-			float		m_fWrapx;	 			// 0x28
-			float		m_fCentreSize; 			// 0x2C
-			float		m_fRightJustifyWrap;	// 0x30
-			uint16_t	m_wFontStyle;			// 0x34
-			uint16_t	m_wPad0;				// 0x36
-			uint32_t	m_dwUnk3;				// 0x38
-			uint16_t	m_wDropShadowPosition;	// 0x3C
-			uint32_t	m_dwDropColor;			// 0x3E
-			uint16_t	m_wPad1;				// 0x42
-		} *CFont__Details;
-		#pragma pack(pop)
-
-		STRUCT_SIZE(_CFont__Details, 0x44);
-
-		// @CFont::SetFontStyle
-		typedef void (*fn_CFont__SetFontStyle)(uint16_t);
-		fn_CFont__SetFontStyle CFont__SetFontStyle;
-
-		// @CFont::PrintString
-		typedef void (*fn_CFont__PrintString)(float, float, uint16_t *);
-		fn_CFont__PrintString CFont__PrintString;
-
-		// @RsGlobal
-		void *RsGlobal;
-
-		float trans_x(float x) { return x * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 12); }
-		float trans_y(float y) { return y * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 16); }
-
-		void _draw_poly(float topleftx, float toplefty, float toprightx, float toprighty,
-					  float bottomleftx, float bottomlefty, float bottomrightx, float bottomrighty, uint8_t *rgba)
-		{
-			CSprite2d__SetVertices(trans_x(topleftx), trans_y(toplefty), trans_x(toprightx), trans_y(toprighty),
-					 	 	 	 trans_x(bottomleftx), trans_y(bottomlefty), trans_x(bottomrightx), trans_y(bottomrighty),
-					 	 	 	 rgba, rgba, rgba, rgba);
-			RwRenderStateSet(1, 0);
-			RwRenderStateSet(7, 1);
-			RwRenderStateSet(6, 0);
-			RwRenderStateSet(8, 0);
-			RwRenderStateSet(12, rgba[3] != 255);
-			RwIm2DRenderPrimitive(5, CSprite2d__maVertices, 4);
-			RwRenderStateSet(6, 1);
-			RwRenderStateSet(8, 1);
-			RwRenderStateSet(7, 2);
-		}
-
-		void _print_string(uint16_t *str, float x, float y, eAlign align, float scalex, float scaley, uint8_t *rgba, eStyle style)
-		{
-			// save current font settings
-			_CFont__Details	*fd = CFont__Details;
-			_CFont__Details fdbcp = *fd;
-
-			// set font align
-			fd->m_bCentre = false;
-			fd->m_bLeftJustify = false;
-			fd->m_bRightJustify = false;
-			switch (align)
-			{
-			case eAlignCenter:
-				fd->m_bCentre = true;
-				break;
-			case eAlignLeft:
-				fd->m_bLeftJustify = true;
-				break;
-			case eAlignRight:
-				fd->m_bRightJustify = true;
-				break;
-			}
-			// style
-			switch (style)
-			{
-			case eStyleClassic:
-				CFont__SetFontStyle(2);
-				scalex *= 2.6;
-				scaley *= 1.5;
-				break;
-			case eStyleSimple:
-				CFont__SetFontStyle(2);
-				scalex *= 2.4;
-				scaley *= 1.3;
-				break;
-			case eStyleSpecial:
-				CFont__SetFontStyle(0);
-				break;
-			}
-			// scale
-			fd->m_fScaleX = scalex;
-			fd->m_fScaleY = scaley;
-			// color
-			fd->m_dwColor = read_u32(rgba);
-			// common
-			fd->m_bBackground = false;
-			fd->m_bProp = true;
-			fd->m_wDropShadowPosition = 1;
-			fd->m_dwDropColor = 0xFF000000;
-
-			// print string
-			CFont__PrintString(trans_x(x), trans_y(y), str);
-
-			// restore font settings
-			*fd = fdbcp;
-		}
-
-		void init()
-		{
-			// @CSprite2d::SetVertices
-			CSprite2d__SetVertices = getsym<fn_CSprite2d__SetVertices>("_ZN9CSprite2d11SetVerticesEffffffffRK5CRGBAS2_S2_S2_");
-			// @RwRenderStateSet
-			RwRenderStateSet = getsym<fn_RwRenderStateSet>("_Z16RwRenderStateSet13RwRenderStatePv");
-			// @RwIm2DRenderPrimitive
-			RwIm2DRenderPrimitive = getsym<fn_RwIm2DRenderPrimitive>("_Z21RwIm2DRenderPrimitive15RwPrimitiveTypeP14RwOpenGLVertexi");
-			// @CSprite2d::maVertices
-			CSprite2d__maVertices = getsym<void *>("_ZN9CSprite2d10maVerticesE");
-
-			// @CHud::Draw
-			_CHud__Draw = getsym<fn_CHud__Draw>("_ZN4CHud4DrawEv");
-			armhook::hook_thumb_func(_CHud__Draw, 4, CHud__Draw, &CHud__Draw_);
-			// @CFont::Details
-			CFont__Details = getsym<_CFont__Details*>("_ZN5CFont7DetailsE");
-			// @CFont::SetFontStyle
-			CFont__SetFontStyle = getsym<fn_CFont__SetFontStyle>("_ZN5CFont12SetFontStyleEs");
-			// @CFont::PrintString
-			CFont__PrintString = getsym<fn_CFont__PrintString>("_ZN5CFont11PrintStringEffPt");
-			// @RsGlobal
-			RsGlobal = getsym<void *>("RsGlobal");
-
-			draw_poly = _draw_poly;
-			print_string = _print_string;
-
-			uint8_t color[4] = {225, 216, 161, 255};
-			memcpy(menu_selected_item_font_color, color, sizeof(color));
-			uint8_t arrow_color[4] = { 55, 127, 175, 110 };
-			memcpy(menu_arrow_color, arrow_color, sizeof(arrow_color));
-			menu_arrow_selected_alpha = 220;
-		}
-	}
-
-	namespace vc
-	{
-		// @CSprite2d::Draw2DPolygon
-		typedef void (*fn_CSprite2d__Draw2DPolygon)(float, float, float, float, float, float, float, float, uint8_t *);
-		fn_CSprite2d__Draw2DPolygon CSprite2d__Draw2DPolygon;
-
-		// @CHud::Draw
-		typedef void (*fn_CHud__Draw)();
-		fn_CHud__Draw _CHud__Draw, CHud__Draw_;
-		void CHud__Draw()
-		{
-			CHud__Draw_();
-			on_draw();
-		}
-
-		// @CFont::Details
-		#pragma pack(push, 1)
-		struct _CFont__Details
-		{
-			uint32_t	m_dwColor;				// 0x00
-			float		m_fScaleX;	 			// 0x04
-			float		m_fScaleY;	 			// 0x08
-			float		m_fSlant;	 			// 0x0C
-			float		m_fSlantRefPointX;		// 0x10
-			float		m_fSlantRefPointY;		// 0x14
-			bool		m_bLeftJustify;			// 0x18
-			bool		m_bCentre;				// 0x19
-			bool		m_bRightJustify;		// 0x1A
-			bool		m_bBackground;			// 0x1B
-			bool		m_bBackGroundOnlyText;	// 0x1C
-			bool		m_bProp;				// 0x1D
-			bool		m_bUnk0;				// 0x1E
-			bool		m_bFlash;				// 0x1F
-			uint32_t	m_dwUnk1;				// 0x20
-			float		m_fAlphaFade; 			// 0x24
-			uint32_t	m_dwBackgroundColor;	// 0x28
-			float		m_fWrapx;	 			// 0x2C
-			float		m_fCentreSize; 			// 0x30
-			float		m_fRightJustifyWrap;	// 0x34
-			uint16_t	m_wFontStyle;			// 0x38
-			bool		m_bFontStyle_unk;		// 0x3A
-			bool		m_bUnk2;				// 0x3B
-			uint32_t	m_dwUnk3;				// 0x3C
-			uint16_t	m_wDropShadowPosition;	// 0x40
-			uint32_t	m_dwDropColor;			// 0x42
-			uint8_t		m_bUnk4[0x12];			// 0x46
-		} *CFont__Details;
-		#pragma pack(pop)
-
-		STRUCT_SIZE(_CFont__Details, 0x58);
-
-		// @CFont::SetFontStyle
-		typedef void (*fn_CFont__SetFontStyle)(uint16_t);
-		fn_CFont__SetFontStyle CFont__SetFontStyle;
-
-		// @CFont::PrintString
-		typedef void (*fn_CFont__PrintString)(float, float, uint16_t *);
-		fn_CFont__PrintString CFont__PrintString;
-
-		// @RsGlobal
-		void *RsGlobal;
-
-		float trans_x(float x) { return x * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 12); }
-		float trans_y(float y) { return y * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 16); }
-
-		void _draw_poly(float topleftx, float toplefty, float toprightx, float toprighty,
-					  float bottomleftx, float bottomlefty, float bottomrightx, float bottomrighty, uint8_t *rgba)
-		{
-			CSprite2d__Draw2DPolygon(trans_x(topleftx), trans_y(toplefty), trans_x(toprightx), trans_y(toprighty),
-									 trans_x(bottomleftx), trans_y(bottomlefty), trans_x(bottomrightx), trans_y(bottomrighty), rgba);
-		}
-
-		void _print_string(uint16_t *str, float x, float y, eAlign align, float scalex, float scaley, uint8_t *rgba, eStyle style)
-		{
-			// save current font settings
-			_CFont__Details	*fd = CFont__Details;
-			_CFont__Details fdbcp = *fd;
-
-			// set font align
-			fd->m_bCentre = false;
-			fd->m_bLeftJustify = false;
-			fd->m_bRightJustify = false;
-			switch (align)
-			{
-			case eAlignCenter:
-				fd->m_bCentre = true;
-				break;
-			case eAlignLeft:
-				fd->m_bLeftJustify = true;
-				break;
-			case eAlignRight:
-				fd->m_bRightJustify = true;
-				break;
-			}
-			// style
-			switch (style)
-			{
-			case eStyleClassic:
-				CFont__SetFontStyle(2);
-				scalex *= 1.9;
-				scaley *= 1.5;
-				break;
-			case eStyleSimple:
-				CFont__SetFontStyle(2);
-				scalex *= 1.8;
-				scaley *= 1.3;
-				break;
-			case eStyleSpecial:
-				CFont__SetFontStyle(0);
-				break;
-			}
-			// scale
-			fd->m_fScaleX = scalex;
-			fd->m_fScaleY = scaley;
-			// color
-			fd->m_dwColor = read_u32(rgba);
-			// common
-			fd->m_bBackground = false;
-			fd->m_bFlash = false;
-			fd->m_bProp = true;
-			fd->m_wDropShadowPosition = 1;
-			fd->m_dwDropColor = 0xFF000000;
-
-			// print string
-			CFont__PrintString(trans_x(x), trans_y(y), str);
-
-			// restore font settings
-			*fd = fdbcp;
-		}
-
-		void init()
-		{
-			// @CSprite2d::Draw2DPolygon
-			CSprite2d__Draw2DPolygon = getsym<fn_CSprite2d__Draw2DPolygon>("_ZN9CSprite2d13Draw2DPolygonEffffffffRK5CRGBA");
-			// @CHud::Draw
-			_CHud__Draw = getsym<fn_CHud__Draw>("_ZN4CHud4DrawEv");
-			armhook::hook_thumb_func(_CHud__Draw, 4, CHud__Draw, &CHud__Draw_);
-			// @CFont::Details
-			CFont__Details = getsym<_CFont__Details*>("_ZN5CFont7DetailsE");
-			// @CFont::SetFontStyle
-			CFont__SetFontStyle = getsym<fn_CFont__SetFontStyle>("_ZN5CFont12SetFontStyleEs");
-			// @CFont::PrintString
-			CFont__PrintString = getsym<fn_CFont__PrintString>("_ZN5CFont11PrintStringEffPt");
-			// @RsGlobal
-			RsGlobal = getsym<void *>("RsGlobal");
-
-			draw_poly = _draw_poly;
-			print_string = _print_string;
-
-			uint8_t color[4] = {225, 216, 161, 255};
-			memcpy(menu_selected_item_font_color, color, sizeof(color));
-			uint8_t arrow_color[4] = { 55, 127, 175, 110 };
-			memcpy(menu_arrow_color, arrow_color, sizeof(arrow_color));
-			menu_arrow_selected_alpha = 220;
-		}
-	}
-
-	namespace sa
-	{
-		// @CSprite2d::Draw2DPolygon
-		typedef void (*fn_CSprite2d__Draw2DPolygon)(float, float, float, float, float, float, float, float, uint8_t *);
-		fn_CSprite2d__Draw2DPolygon CSprite2d__Draw2DPolygon;
-
-		// @CHud::Draw
-		typedef void (*fn_CHud__Draw)();
-		fn_CHud__Draw _CHud__Draw, CHud__Draw_;
-		void CHud__Draw()
-		{
-			CHud__Draw_();
-			on_draw();
-		}
-
-		// @CFont::Details
-		#pragma pack(push, 1)
-		struct _CFont__Details
-		{
-			uint32_t	m_dwColor;				// 0x00
-			float		m_fScaleX;	 			// 0x04
-			float		m_fScaleY;	 			// 0x08
-			float		m_fSlant;	 			// 0x0C
-			float		m_fSlantRefPointX;		// 0x10
-			float		m_fSlantRefPointY;		// 0x14
-			bool		m_bLeftJustify;			// 0x18
-			bool		m_bCentre;				// 0x19
-			bool		m_bRightJustify;		// 0x1A
-			bool		m_bBackground;			// 0x1B
-			bool		m_bBackGroundOnlyText;	// 0x1C
-			bool		m_bProp;				// 0x1D
-			bool		m_bUnk0;				// 0x1E
-			bool		m_bFlash;				// 0x1F
-			float		m_fAlpha; 				// 0x20
-			uint32_t	m_dwBackgroundColor;	// 0x24
-			float		m_fWrapx;	 			// 0x28
-			float		m_fCentreSize; 			// 0x2C
-			float		m_fRightJustifyWrap;	// 0x30
-			uint8_t		m_bFontStyle;			// 0x34
-			uint8_t		m_bFontStyle_unk;		// 0x35
-			uint8_t		m_bDropShadowPosition;	// 0x36
-			uint32_t	m_dwDropColor;			// 0x37
-			uint8_t		m_bEdge1;				// 0x3B
-			uint8_t		m_bEdge2;				// 0x3C
-			uint8_t		padding[3];				// 0x3D
-		} *CFont__Details;
-		#pragma pack(pop)
-
-		STRUCT_SIZE(_CFont__Details, 0x40);
-
-		// @CFont::SetFontStyle
-		typedef void (*fn_CFont__SetFontStyle)(uint8_t);
-		fn_CFont__SetFontStyle CFont__SetFontStyle;
-
-		// @CFont::PrintString
-		typedef void (*fn_CFont__PrintString)(float, float, uint16_t *);
-		fn_CFont__PrintString CFont__PrintString;
-
-		// @RsGlobal
-		void *RsGlobal;
-
-		float trans_x(float x) { return x * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 4); }
-		float trans_y(float y) { return y * *cast<int32_t *>(cast<uint32_t>(RsGlobal) + 8); }
-
-		void _draw_poly(float topleftx, float toplefty, float toprightx, float toprighty,
-					  float bottomleftx, float bottomlefty, float bottomrightx, float bottomrighty, uint8_t *rgba)
-		{
-			CSprite2d__Draw2DPolygon(trans_x(topleftx), trans_y(toplefty), trans_x(toprightx), trans_y(toprighty),
-									 trans_x(bottomleftx), trans_y(bottomlefty), trans_x(bottomrightx), trans_y(bottomrighty), rgba);
-		}
-
-		void _print_string(uint16_t *str, float x, float y, eAlign align, float scalex, float scaley, uint8_t *rgba, eStyle style)
-		{
-			// utils::log("%x %d %d %d %d", rgba, rgba[0], rgba[1], rgba[2], rgba[3]);
-
-			// save current font settings
-			_CFont__Details	*fd = CFont__Details;
-			_CFont__Details fdbcp = *fd;
-
-			// set font align
-			fd->m_bCentre = false;
-			fd->m_bLeftJustify = false;
-			fd->m_bRightJustify = false;
-			switch (align)
-			{
-			case eAlignCenter:
-				fd->m_bCentre = true;
-				break;
-			case eAlignLeft:
-				fd->m_bLeftJustify = true;
-				break;
-			case eAlignRight:
-				fd->m_bRightJustify = true;
-				break;
-			}
-			// style
-			switch (style)
-			{
-			case eStyleClassic:
-				CFont__SetFontStyle(3);
-				scalex *= 1.9;
-				scaley *= 1.5;
-				break;
-			case eStyleSimple:
-				CFont__SetFontStyle(2);
-				scalex *= 1.4;
-				scaley *= 1.3;
-				break;
-			case eStyleSpecial:
-				CFont__SetFontStyle(0);
-				break;
-			}
-			// scale
-			fd->m_fScaleX = scalex;
-			fd->m_fScaleY = scaley;
-			// color
-			fd->m_dwColor = read_u32(rgba);
-			// common
-			fd->m_bBackground = false;
-			fd->m_bFlash = false;
-			fd->m_bProp = true;
-			fd->m_bDropShadowPosition = 1;
-			fd->m_bEdge1 = 0;
-			fd->m_bEdge2 = 0;
-			fd->m_dwDropColor = 0xFF000000;
-
-			// print string
-			CFont__PrintString(trans_x(x), trans_y(y), str);
-
-			// restore font settings
-			*fd = fdbcp;
-		}
-
-		void init()
-		{
-			// @CSprite2d::Draw2DPolygon
-			CSprite2d__Draw2DPolygon = getsym<fn_CSprite2d__Draw2DPolygon>("_ZN9CSprite2d13Draw2DPolygonEffffffffRK5CRGBA");
-			// @CHud::Draw
-			_CHud__Draw = getsym<fn_CHud__Draw>("_ZN4CHud4DrawEv");
-			armhook::hook_thumb_func(_CHud__Draw, 4, CHud__Draw, &CHud__Draw_);
-			// @CFont::Details
-			CFont__Details = getsym<_CFont__Details*>("_ZN5CFont7DetailsE");
-			// @CFont::SetFontStyle
-			CFont__SetFontStyle = getsym<fn_CFont__SetFontStyle>("_ZN5CFont12SetFontStyleEh");
-			// @CFont::PrintString
-			CFont__PrintString = getsym<fn_CFont__PrintString>("_ZN5CFont11PrintStringEffPt");
-			// @RsGlobal
-			RsGlobal = getsym<void *>("RsGlobal");
-
-			draw_poly = _draw_poly;
-			print_string = _print_string;
-
-			uint8_t color[4] = { 40, 235, 24, 255 };
-			memcpy(menu_selected_item_font_color, color, sizeof(color));
-			uint8_t arrow_color[4] = { 55, 127, 175, 100 };
-			memcpy(menu_arrow_color, arrow_color, sizeof(arrow_color));
-			menu_arrow_selected_alpha = 180;
-		}
-	}
-
-#endif
 
 	namespace lcs
 	{
@@ -592,19 +89,10 @@ namespace ui
 			uint32_t	m_dwOutlineColor;		// 0x58
 			uint32_t	m_bOutlineOn;			// 0x5C
 			uint32_t	m_dwNewLineAdd;			// 0x60
-#ifdef ANDROID
-			float		m_fIconScale; 			// 0x64
-			float		m_fIconYCorrection;		// 0x68
-			float		m_fIconXCorrection;		// 0x6C
-#endif
 		} *CFont__Details;
 		#pragma pack(pop)
 
-#ifdef ANDROID
-		STRUCT_SIZE(_CFont__Details, 0x70);
-#else
 		STRUCT_SIZE(_CFont__Details, 0x64);
-#endif
 
 		// @CFont::SetFontStyle
 		typedef void (*fn_CFont__SetFontStyle)(uint16_t);
@@ -614,13 +102,8 @@ namespace ui
 		typedef void (*fn_CFont__PrintString)(float, float, uint16_t *, float *);
 		fn_CFont__PrintString CFont__PrintString;
 
-#ifdef ANDROID
-		float trans_x(float x) { return x * 640.0; }
-		float trans_y(float y) { return y * 448.0; }
-#else
 		float trans_x(float x) { return x * 480.0; }
 		float trans_y(float y) { return y * 272.0; }
-#endif
 
 		void _draw_poly(float topleftx, float toplefty, float toprightx, float toprighty,
 					  float bottomleftx, float bottomlefty, float bottomrightx, float bottomrighty, uint8_t *rgba)
@@ -656,24 +139,14 @@ namespace ui
 			{
 			case eStyleClassic:
 				CFont__SetFontStyle(2);
-#ifdef ANDROID
-				scalex *= 1.2f;
-				scaley *= 1.3f;
-#else
 				scalex *= 0.8f;
 				scaley *= 0.72f;
-#endif
 				break;
 			case eStyleSimple:
 			case eStyleSpecial:
 				CFont__SetFontStyle(2);
-#ifdef ANDROID
-				scalex *= 1.1f;
-				scaley *= 1.05f;
-#else				
 				scalex *= 0.75f;
 				scaley *= 0.65f;
-#endif
 				break;
 			}
 
@@ -689,7 +162,6 @@ namespace ui
 			fd->m_wDropShadowPosition = 1;
 			fd->m_dwDropColor = 0xFF000000;
 
-#ifndef ANDROID
 			if (psplang::is_lcs_rus1())
 			{
 				CFont__SetFontStyle(1);
@@ -702,7 +174,6 @@ namespace ui
 				fd->m_wDropShadowPosition = 0;
 				fd->m_dwDropColor = 0xFF000000;
 			}
-#endif
 
 			// print string
 			CFont__PrintString(trans_x(x), trans_y(y), str, NULL);
@@ -713,19 +184,6 @@ namespace ui
 
 		void init()
 		{
-#ifdef ANDROID
-			// @CSprite2d::Draw2DPolygon
-			CSprite2d__Draw2DPolygon = getsym<fn_CSprite2d__Draw2DPolygon>("_ZN9CSprite2d13Draw2DPolygonEffffffffRK5CRGBA");
-			// @CHud::Draw
-			_CHud__Draw = getsym<fn_CHud__Draw>("_ZN4CHud4DrawEv");
-			armhook::hook_arm_func(_CHud__Draw, 4, CHud__Draw, &CHud__Draw_);
-			// @CFont::Details
-			CFont__Details = getsym<_CFont__Details*>("_ZN5CFont7DetailsE");
-			// @CFont::SetFontStyle
-			CFont__SetFontStyle = getsym<fn_CFont__SetFontStyle>("_ZN5CFont12SetFontStyleEs");
-			// @CFont::PrintString
-			CFont__PrintString = getsym<fn_CFont__PrintString>("_ZN5CFont11PrintStringEffPtPi");
-#else
 			uint32_t addr;
 
 			#define PATTERN_NOT_FOUND {	utils::log("required ui pattern %d not found!", __LINE__); exit(1); }
@@ -741,7 +199,7 @@ namespace ui
 			// @CHud::Draw
 			FIND_PATTERN("8C 07 B4 E7 90 07 B6 E7 94 07 B8 E7 98 07 BA E7");
 			_CHud__Draw = cast<fn_CHud__Draw>(addr - 0x0C);
-			armhook::hook_mips_func(_CHud__Draw, 8, CHud__Draw, &CHud__Draw_);
+			armhook::hook_mips_calls(_CHud__Draw, CHud__Draw, &CHud__Draw_);
 
 			// @CFont::Details
 			FIND_PATTERN("25 28 80 00 00 00 A4 90 ?? ?? 06 3C ?? ?? C4 A0");
@@ -754,7 +212,6 @@ namespace ui
 			// @CFont::PrintString
 			FIND_PATTERN("90 FF BD 27 40 00 B4 E7 44 00 B6 E7 50 00 B0 AF");
 			CFont__PrintString = cast<fn_CFont__PrintString>(addr);
-#endif
 
 			draw_poly = _draw_poly;
 			print_string = _print_string;
@@ -769,7 +226,6 @@ namespace ui
 		}
 	}
 
-#ifndef ANDROID
 	namespace vcs
 	{
 		// @CSprite2d::Draw2DPolygon
@@ -893,9 +349,11 @@ namespace ui
 			CSprite2d__Draw2DPolygon = cast<fn_CSprite2d__Draw2DPolygon>(addr - 0x18);
 
 			// @CHud::Draw
-			FIND_PATTERN("E0 FF BD 27 ?? ?? 85 93 00 00 B0 AF 25 80 80 00"); // reads gp related addr
-			_CHud__Draw = cast<fn_CHud__Draw>(addr);
-			armhook::hook_mips_func(_CHud__Draw, 8, CHud__Draw, &CHud__Draw_);
+			// WidescreenFix replaces the first two instructions. Match the saved
+			// registers and following pause-screen branch beyond that entry hook.
+			FIND_PATTERN("00 00 B0 AF 25 80 80 00 04 00 B1 AF 08 00 B2 AF 0C 00 B3 AF 10 00 B4 AF 14 00 BF AF ?? ?? A0 14 ?? ?? 14 3C ?? ?? 84 8E 00 C7 05 3C 01 01 A5 24");
+			_CHud__Draw = cast<fn_CHud__Draw>(addr - 8);
+			armhook::hook_mips_calls(_CHud__Draw, CHud__Draw, &CHud__Draw_);
 
 			// @CFont::PrintString
 			FIND_PATTERN("25 A0 40 00 25 20 40 02 25 28 20 02 25 30 00 02");
@@ -934,22 +392,23 @@ namespace ui
 			menu_arrow_selected_alpha = 220;
 		}
 	}
-#endif
 
 	// arrow
 
 	static uint16_t unistr[512];
 	uint16_t *ansi_to_unicode(LPCSTR str, bool localize = false)
 	{		
-#ifndef ANDROID
 		std::string localized;
 		if (localize)
 		{
 			localized = psplang::localize(str);
 			str = localized.c_str();
 		}
-#endif
-		strutils::wstr_from_ansi(unistr, str);
+		// Script menu titles have no length limit; keep the shared buffer terminated.
+		size_t i = 0;
+		for (; str[i] && i < sizeof(unistr) / sizeof(unistr[0]) - 1; i++)
+			unistr[i] = str[i];
+		unistr[i] = 0;
 		return unistr;
 	}
 
@@ -962,13 +421,9 @@ namespace ui
 		float aextent = 0.027, awidth = 0.12;
 		draw_poly(left - aextent, top + h, left + width + aextent, top + h, 0.5, top + h + awidth, 0.5, top + h + awidth, arrow_color);
 		uint8_t font_color[4] = { 252, 250, 250, 255 };
-#ifdef ANDROID
-		print_string(ansi_to_unicode("OPEN CLEO MENU", true), 0.5, top - 0.05, eAlignCenter, 0.65, 1.5, font_color, eStyleClassic);
-#else
 		print_string(ansi_to_unicode("OPEN CLEO MENU", true), 0.5, top - 0.05, eAlignCenter, 0.85, 2.1, font_color, eStyleClassic);
 		print_string(ansi_to_unicode("PSP: PRESS START", true), 0.5, top + 0.1, eAlignCenter, 0.85, 2.1, font_color, eStyleClassic);
 		print_string(ansi_to_unicode("TO OPEN GAME MENU HOLD START", true), 0.5, top + 0.19, eAlignCenter, 0.5, 1.3, font_color, eStyleClassic);
-#endif
 	}
 
 	uint32_t arrow_draw_until_time;		// time in ticks til arrow must be drawn
@@ -1075,73 +530,6 @@ namespace ui
 	}	
 
 
-#ifdef ANDROID
-
-	// checks if coords are inside properly defined rect
-	bool coords_inside_rect(float x, float y, float x1, float y1, float x2, float y2)
-	{
-		return (x >= x1 && y >= y1 && x <= x2 && y <= y2);
-	}
-
-	// checks if coords are approximately inside 2d poly with 4 verts
-	bool coords_approx_inside_rect(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
-	{
-		float center_x = (x1 + x2 + x3 + x4) / 4, center_y = (y1 + y2 + y3 + y4) / 4;
-		float radius = sqrt((x1 - center_x) * (x1 - center_x) + (y1 - center_y) * (y1 - center_y));
-		radius += radius / 2;
-
-		float dist = sqrt((x - center_x) * (x - center_x) + (y - center_y) * (y - center_y));
-		return dist < radius;
-	}
-
-	// handles touches, called in @touch::touch_event()
-	void handle_touch(float x, float y)
-	{
-		// check if menu is active
-		if (menu_active_page == -1) return;
-		// items
-		for (int32_t i = 0; i < menu_item_points_current; i++)
-		{
-			if (coords_inside_rect(x, y, menu_item_points[i * 4], menu_item_points[i * 4 + 1], menu_item_points[i * 4 + 2], menu_item_points[i * 4 + 3]))
-			{
-				menu_selected_item = menu_active_page * menu_items_per_page + i;
-				menu_selected_item_time = utils::get_tick_count();
-				menu_item_highlight_frames_left = menu_highlight_frames;
-				return;
-			}
-		}
-		// close button
-		if (coords_inside_rect(x, y, menu_close_points[0], menu_close_points[1], menu_close_points[2], menu_close_points[3]))
-		{
-			menu_selected_item = -2;
-			menu_selected_item_time = utils::get_tick_count();
-			return;
-		}
-		// arrows
-		if (menu_page_count > 1)
-		{
-			if (coords_approx_inside_rect(x, y, menu_arrow_left_points[0], menu_arrow_left_points[1], menu_arrow_left_points[2], menu_arrow_left_points[3],
-												menu_arrow_left_points[4], menu_arrow_left_points[5], menu_arrow_left_points[6], menu_arrow_left_points[7]))
-			{
-				if (menu_active_page-- == 0)
-					menu_active_page = menu_page_count - 1;
-				menu_active_item = menu_active_page * menu_items_per_page; // compat
-				menu_arrow_left_highlight_frames_left = menu_highlight_frames;
-				return;
-			}
-			if (coords_approx_inside_rect(x, y, menu_arrow_right_points[0], menu_arrow_right_points[1], menu_arrow_right_points[2], menu_arrow_right_points[3],
-												menu_arrow_right_points[4], menu_arrow_right_points[5], menu_arrow_right_points[6], menu_arrow_right_points[7]))
-			{
-				if (menu_active_page++ == menu_page_count - 1)
-					menu_active_page = 0;
-				menu_active_item = menu_active_page * menu_items_per_page; // compat
-				menu_arrow_right_highlight_frames_left = menu_highlight_frames;
-				return;
-			}
-		}
-	}
-
-#else
 
 	void handle_psp_controls()
 	{
@@ -1213,7 +601,6 @@ namespace ui
 		}
 	}
 
-#endif
 
 	// menu must be active in order this to be called
 	void draw_menu()
@@ -1225,21 +612,11 @@ namespace ui
 		// draw title
 		uint8_t font_color[4] = { 252, 250, 250, 255 };
 		print_string(ansi_to_unicode(menu_name.c_str()), 0.5, top - 0.03, eAlignCenter, 0.8, 1.8, font_color, eStyleClassic);
-#ifdef ANDROID
-		// draw close button
-		menu_close_points[0] = 0.2;
-		menu_close_points[1] = 0.87;
-		menu_close_points[2] = menu_close_points[0] + 0.1;
-		menu_close_points[3] = menu_close_points[1] + 0.1;
-		//draw_poly(menu_close_points[0], menu_close_points[1], menu_close_points[2], menu_close_points[1],
-		//		  menu_close_points[0], menu_close_points[3], menu_close_points[2], menu_close_points[3], rect_color);
-		print_string(ansi_to_unicode(menu_close_name.c_str()), menu_close_points[0], menu_close_points[1], eAlignLeft, 0.6, 1.6, font_color, eStyleClassic);
-#endif
 		// draw page num if needed
 		if (menu_page_count > 1)
 		{
 			char str[32];
-			sprintf(str, "%d of %d", menu_active_page + 1, menu_page_count);
+			snprintf(str, sizeof(str), "%d of %d", int(menu_active_page + 1), int(menu_page_count));
 			print_string(ansi_to_unicode(str), 0.61, top + 0.04, eAlignCenter, 0.4f, 0.8f, font_color, eStyleSimple);
 		}
 		// draw items
@@ -1258,10 +635,8 @@ namespace ui
 				menu_item_highlight_frames_left--;
 			}
 
-#ifndef ANDROID
 			if (menu_active_item == start_item + i && !menu_item_highlight_frames_left) // menu_selected_item != menu_active_item
 				memcpy(font_color, menu_active_item_font_color, sizeof(font_color));
-#endif
 
 			print_string((uint16_t *)menu_items[start_item + i].c_str(), 0.5, top, eAlignCenter, 0.5, 1.5, font_color, eStyleSimple);
 			top += 0.01;
@@ -1343,25 +718,12 @@ namespace ui
 	{
 		switch (core::GetGame())
 		{
-#ifdef ANDROID
-		case core::GTA3:
-			gta3::init();
-			break;
-		case core::GTAVC:
-			vc::init();
-			break;
-		case core::GTASA:
-			sa::init();
-			break;
-#endif
 		case core::GTALCS:
 			lcs::init();
 			break;
-#ifndef ANDROID
 		case core::GTAVCS:
 			vcs::init();
 			break;
-#endif
 		}
 	}
 }

@@ -78,21 +78,11 @@ namespace plugins
 		uint32_t (*GetMainLibraryExecutableSections)(section_t *sections, uint32_t size);
 		void *(*FindExecutablePattern)(const char *pattern, uint32_t index);
 
-#ifdef ANDROID
-		void *(*GetMainLibrarySymbol)(const char *name);
-#endif
 
 		void (*MemWriteArr)(void *addr, uint8_t *arr, uint32_t size, bool protect);
 
-#ifdef ANDROID
-		void (*ReplaceThumbCall)(void *addr, void *func_to);
-		void (*HookThumbFunc)(void *func, uint32_t startSize, void *func_to, void **func_orig);
-		void (*ReplaceArmCall)(void *addr, void *func_to);
-		void (*HookArmFunc)(void *func, uint32_t startSize, void *func_to, void **func_orig);
-#else
 		void (*ReplaceMipsCall)(void *addr, void *func_to);
 		void (*HookMipsFunc)(void *func, uint32_t startSize, void *func_to, void **func_orig);
-#endif
 
 		// ip is a pointer inside scriptHandle structure, the structure is different in all games
 		typedef void (*opcode_handler_t)(void *scriptHandle, uint32_t *ip, uint16_t opcode, const char *name);
@@ -188,39 +178,12 @@ namespace plugins
 			return __FindPatternAddressCompact(res, pattern, index) ? res : NULL;
 		}
 
-#ifdef ANDROID
-		static void *_GetMainLibrarySymbol(const char *name)
-		{
-			return libres::getsym(name);
-		}
-#endif
 
 		static void _MemWriteArr(void *addr, uint8_t *arr, uint32_t size, bool protect)
 		{
 			memutils::mem_write_arr(cast<uint8_t *>(addr), arr, size, protect);
 		}
 
-#ifdef ANDROID
-		static void _ReplaceThumbCall(void *addr, void *func_to)
-		{
-			armhook::replace_thumb_call(cast<ptr>(addr), cast<ptr>(func_to));
-		}
-			 
-		static void _HookThumbFunc(void *func, uint32_t startSize, void *func_to, void **func_orig)
-		{
-			armhook::hook_thumb_func(func, startSize, func_to, func_orig);
-		}
-			 
-		static void _ReplaceArmCall(void *addr, void *func_to)
-		{
-			armhook::replace_arm_call(cast<ptr>(addr), cast<ptr>(func_to));
-		}
-			 
-		static void _HookArmFunc(void *func, uint32_t startSize, void *func_to, void **func_orig)
-		{
-			armhook::hook_arm_func(func, startSize, func_to, func_orig);
-		}
-#else
 		static void _ReplaceMipsCall(void *addr, void *func_to)
 		{
 			armhook::replace_mips_call(cast<ptr>(addr), cast<ptr>(func_to));
@@ -230,7 +193,6 @@ namespace plugins
 		{
 			armhook::hook_mips_func(func, startSize, func_to, func_orig);
 		}
-#endif
 
 		static bool _RegisterOpcode(uint16_t opcode, opcode_handler_t handler)
 		{
@@ -347,19 +309,9 @@ namespace plugins
 			func(GetMainLibraryLoadAddress),
 			func(GetMainLibraryExecutableSections),
 			func(FindExecutablePattern),
-#ifdef ANDROID
-			func(GetMainLibrarySymbol),
-#endif
 			func(MemWriteArr),
-#ifdef ANDROID
-			func(ReplaceThumbCall),
-			func(HookThumbFunc),
-			func(ReplaceArmCall),
-			func(HookArmFunc),
-#else
 			func(ReplaceMipsCall),
 			func(HookMipsFunc),
-#endif
 			func(RegisterOpcode),
 			func(RegisterOpcodeFunction),
 			func(ReadParam),
@@ -391,7 +343,8 @@ namespace plugins
 				if (!core::read_str_long(cast<ptr>(scriptHandle), str))
 				{
 					utils::log("1000: func name isn't defined");
-					exit(1);
+					core::stop_script(cast<ptr>(scriptHandle));
+					return true;
 				}
 			} else
 			{
@@ -404,7 +357,8 @@ namespace plugins
 						if (!core::read_str_8byte(cast<ptr>(scriptHandle), str_short))
 						{
 							utils::log("1000: func name has to be a set of 8byte strings"); // works only in VCS
-							exit(1);
+							core::stop_script(cast<ptr>(scriptHandle));
+							return true;
 						}						
 						for (int i = 0; i < str_short.size(); i++)
 						{
@@ -418,7 +372,8 @@ namespace plugins
 								if (str.size() > 64)
 								{
 									utils::log("1000: func name has more than 64 chars (limit while using 8byte strings) '%s'", str.c_str());
-									exit(1);
+									core::stop_script(cast<ptr>(scriptHandle));
+									return true;
 								}
 							}
 						}
@@ -436,77 +391,13 @@ namespace plugins
 			} else
 			{
 				utils::log("1000: func '%s' not found", str.c_str());
-				exit(1);
+				core::stop_script(cast<ptr>(scriptHandle));
 			}
 			return true;
 		}
 		return false;
 	}
 
-#ifdef ANDROID
-
-	void for_each_plugin(std::string dir, void (*file_cb)(std::string, std::string))
-	{
-		std::vector<std::string> file_names;
-		if (utils::list_files_in_dir(dir, file_names))
-			for (int i = 0; i < (int)file_names.size(); i++)
-				if (strutils::get_ext(file_names[i]) == "so")
-					file_cb(dir, file_names[i]);
-	}
-
-	void remove_plugin(std::string dir, std::string fname)
-	{
-		utils::log("deleting %s", (dir + fname).c_str());
-		remove((dir + fname).c_str());
-	}
-
-	void copy_plugin(std::string dir, std::string fname)
-	{
-		std::string file_from = dir + fname;
-		std::string file_to = load_dir + fname;
-		uint32_t size;
-		if (uint8_t *buf = utils::load_binary_file(file_from, size))
-		{
-			if (size)
-			{
-				if (FILE *f = fopen(file_to.c_str(), "wb"))
-				{
-					utils::log("copying %s -> %s", file_from.c_str(), file_to.c_str());
-					fwrite(buf, 1, size, f);
-					fclose(f);
-				}
-			}
-			free(buf);
-		}
-	}
-
-	void load_plugin(std::string dir, std::string fname)
-	{
-		utils::log("plugin is loading '%s'", (dir + fname).c_str());
-		void *lib = dlopen((dir + fname).c_str(), RTLD_NOW);
-		utils::log("handle %08x", lib);
-		#pragma message "todo"
-		if (lib)
-			if (void (*plugin_init)(void *) = (void (*)(void *))dlsym(lib, "plugin_init"))
-			{
-				plugin_init(&plugin_ifs);
-				utils::log("plugin loaded successfully");
-				return;
-			}
-		utils::log("plugin loading failed");
-	}
-
-	void init(std::string storage_dir, std::string load_dir)
-	{
-		plugins::storage_dir = strutils::path_normalize(storage_dir, strutils::tspMake);
-		plugins::load_dir = strutils::path_normalize(load_dir, strutils::tspMake);
-
-		for_each_plugin(plugins::load_dir, remove_plugin);
-		for_each_plugin(plugins::storage_dir, copy_plugin);
-		for_each_plugin(plugins::load_dir, load_plugin);
-	}
-
-#else
 
 	char plugin_ifs_as_arg[32];
 	char *args[] = { plugin_ifs_as_arg };
@@ -523,7 +414,7 @@ namespace plugins
 		plugins::storage_dir = storage_dir;
 		plugins::load_dir = load_dir;
 
-		sprintf(plugin_ifs_as_arg, "%08X", cast<uint32_t>(&plugin_ifs));
+		snprintf(plugin_ifs_as_arg, sizeof(plugin_ifs_as_arg), "%08lX", cast<uint32_t>(&plugin_ifs));
 
 		std::vector<std::string> file_names;
 		if (utils::list_files_in_dir(storage_dir, file_names))
@@ -532,6 +423,5 @@ namespace plugins
 					load_plugin(storage_dir, file_names[i]);
 	}
 
-#endif
 
 }

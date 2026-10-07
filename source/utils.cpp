@@ -16,30 +16,19 @@ namespace utils
 	{
 		CS_SCOPE(mutex::mlog);
 
-#ifdef ANDROID
-		va_list lst;
-		va_start(lst, fmt);
-		__android_log_vprint(ANDROID_LOG_DEBUG, "AB", fmt, lst);
-		va_end(lst);
-#else
 		char str[256];
 		va_list lst;
 		va_start(lst, fmt);
-		vsprintf(str, fmt, lst);
+		vsnprintf(str, sizeof(str), fmt, lst);
 		va_end(lst);
-		printf(str);
+		// Script and file names can contain %; never use them as formats.
+		printf("%s", str);
 		printf("\n");
-		pspDebugScreenPrintf(str);
+		pspDebugScreenPrintf("%s", str);
 		pspDebugScreenPrintf("\n");
-#endif
 		if (!log_file)
 		{
-#ifdef ANDROID
-			char str[1024];
-			sprintf(str, "%s/cleo/cleo.log", getenv("EXTERNAL_STORAGE"));
-#else
 			char str[] = "ms0:/PSP/PLUGINS/cleo/cleo.log";
-#endif
 			remove(str);
 			log_file = fopen(str, "wt");
 		}
@@ -56,7 +45,7 @@ namespace utils
 				uint32_t h = h1 % 24;
 				uint32_t m = (tv.tv_sec % 3600) / 60;
 				uint32_t s = tv.tv_sec - h1 * 3600 - m * 60;
-				fprintf(log_file, "[%s%02d:%02d:%02d] ", tz.tz_minuteswest ? "" : "UTC|", h, m, s);
+				fprintf(log_file, "[%s%02d:%02d:%02d] ", tz.tz_minuteswest ? "" : "UTC|", int(h), int(m), int(s));
 			}
 			va_list lst;
 			va_start(lst, fmt);
@@ -81,14 +70,6 @@ namespace utils
 
 	bool list_files_in_dir(std::string dir, std::vector<std::string> &files)
 	{
-#ifdef ANDROID
-	    DIR *dp;
-	    struct dirent *dirp;
-	    if ((dp = opendir(dir.c_str())) == NULL) return false;
-	    while ((dirp = readdir(dp)) != NULL)
-	        files.push_back(std::string(dirp->d_name));
-	    closedir(dp);
-#else		
 		int fd = sceIoDopen(dir.c_str());
 		if (fd < 0) return false;
 		SceIoDirent dirp;
@@ -97,7 +78,6 @@ namespace utils
 			if((dirp.d_stat.st_attr & FIO_SO_IFDIR) == 0)
 				files.push_back(std::string(dirp.d_name));
 		sceIoDclose(fd);
-#endif
 	    if (files.size())
 	    	sort(files.begin(), files.end(), string_compare);
 	    return true;
@@ -105,19 +85,20 @@ namespace utils
 
 	uint8_t *load_binary_file(std::string filename, uint32_t &size)
 	{
-#ifdef ANDROID
-		FILE *file = fopen(filename.c_str(), "rb");
-#else
-		FILE *file = fopen(filename.c_str(), "r");
-#endif
-		if (!file) return NULL;
-		fseek(file, 0, SEEK_END);
-		size = ftell(file);
-		fseek(file, 0, SEEK_SET);
-		uint8_t *buf = cast<ptr>(malloc(size));
-		fread(buf, 1, size, file);
+		size=0;
+		FILE* file=fopen(filename.c_str(),"rb");
+		if (!file) return nullptr;
+		if (fseek(file,0,SEEK_END)!=0) { fclose(file);return nullptr; }
+		const long length=ftell(file);
+		if (length<=0 || fseek(file,0,SEEK_SET)!=0) { fclose(file);return nullptr; }
+		auto* buffer=cast<ptr>(malloc(static_cast<size_t>(length)));
+		if (!buffer) { fclose(file);return nullptr; }
+		const size_t read=fread(buffer,1,static_cast<size_t>(length),file);
+		const bool valid=read==static_cast<size_t>(length) && !ferror(file);
 		fclose(file);
-		return buf;
+		if (!valid) { free(buffer);return nullptr; }
+		size=static_cast<uint32_t>(length);
+		return buffer;
 	}
 
 }

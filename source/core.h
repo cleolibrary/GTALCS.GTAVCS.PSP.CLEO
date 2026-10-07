@@ -42,4 +42,6 @@ namespace core
 	ptr get_real_label_ptr(ptr handle, uint32_t offset);
 	bool read_str_8byte(ptr handle, std::string &str);
 	bool read_str_long(ptr handle, std::string &str);
+	// stops a malformed custom script instead of terminating the game
+	void stop_script(ptr handle);
 }

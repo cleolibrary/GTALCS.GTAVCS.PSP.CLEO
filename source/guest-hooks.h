@@ -4,6 +4,7 @@
 #include "../external/injector/include/psp/hooks_guest.h"
 #include "../external/injector/include/psp/patches.h"
 #include "../external/injector/include/psp/memalloc.h"
+#include "../external/injector/include/psp/game_abi.hpp"
 
 // Prepared once per module; code and handles live in this plugin's reservation.
 namespace guest_hooks {
@@ -11,6 +12,7 @@ inline psp_hook_guest storage;
 inline psp_hook_backend backend;
 inline bool initialized;
 inline uint32_t function_hooks, call_patches;
+inline psp::GameCallbacks callbacks;
 inline void require(bool success, const char* operation)
 {
     if (!success) { utils::log("CLEO hook failure: %s", operation); __builtin_trap(); }
@@ -24,6 +26,17 @@ inline void initialize()
             (unsigned long)psp_mem_storage_begin(), (unsigned long)psp_mem_storage_size());
     require(status == PSP_HOOK_OK, "backend");
     initialized = true;
+}
+template<class Function> inline ptr bridge(Function function) {
+    // The public CLEO plugin API also accepts erased raw stubs. Their stack
+    // layout is owned by that plugin; keep its established native ABI contract.
+    if constexpr (!std::is_function_v<std::remove_pointer_t<Function>>) return cast<ptr>(function);
+    else {
+        initialize();
+        uint32_t entry=0;
+        require(callbacks.bind(backend,function,entry)==PSP_HOOK_OK,"game callback ABI");
+        return cast<ptr>(entry);
+    }
 }
 inline void replace_call(ptr address, ptr target)
 {
